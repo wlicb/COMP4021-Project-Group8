@@ -13,6 +13,19 @@ const typingUsers = [];
 // Create the Express app
 const app = express();
 
+//
+// ***** Please insert your Lab 6 code here *****
+//
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const { clear } = require("console");
+const httpServer = createServer(app);
+const io = new Server(httpServer);
+
+io.use((socket, next) => {
+    chatSession(socket.request, {}, next);
+});
+
 // Use the 'public' folder to serve static files
 app.use(express.static("public"));
 
@@ -170,6 +183,7 @@ app.post("/newRoom", (req, res) => {
     rooms.push(room);
     fs.writeFileSync("./data/rooms.json", JSON.stringify(rooms, null, " "));
     // console.log(rooms);
+    io.emit("show room", rooms);
     res.json({status: "success", rooms: rooms});
 
 });
@@ -193,8 +207,12 @@ app.post("/leaveRoom", (req, res) => {
                 return;
             }
         }
+        if ((r.user1 == "-") && (r.user2 == "-")) {
+            rooms.splice(rooms.indexOf(r), 1);
+        }
     }
     fs.writeFileSync("./data/rooms.json", JSON.stringify(rooms, null, " "));
+    io.emit("show room", rooms);
     res.json({status: "success", rooms: rooms});
 });
 
@@ -222,21 +240,11 @@ app.post("/joinRoom", (req, res) => {
         }
     }
     fs.writeFileSync("./data/rooms.json", JSON.stringify(rooms, null, " "));
+    io.emit("show room", rooms);
     res.json({status: "success", rooms: rooms});
 });
 
-//
-// ***** Please insert your Lab 6 code here *****
-//
-const { createServer } = require("http");
-const { Server } = require("socket.io");
-const { clear } = require("console");
-const httpServer = createServer(app);
-const io = new Server(httpServer);
 
-io.use((socket, next) => {
-    chatSession(socket.request, {}, next);
-});
 
 io.on("connection", (socket) => {
     if (socket.request.session.user) {
