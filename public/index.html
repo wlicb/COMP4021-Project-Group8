@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Game</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <div id="container" class="col">
+        <div id="header" class="row">
+            <div id="title">Rooms</div>
+
+            <div class="spacer-grow"></div>
+
+            <div id="user-panel" class="row">
+                <div class="field-content row shadow">
+                    <span class="user-name">-</span>
+                </div>
+                <button id="signout-button" class="icon"><span class="material-icons">logout</span></button>
+            </div>
+        </div>
+        <div id="main-panel" class="row">
+            <div id="chat-panel" class="col">
+                <div id="room-area" class="col"></div>
+            </div>
+
+            <div id="new-room-panel" class="col">
+                <div id="create-new-room" class="col">
+                    <label>Room Name:</label>
+                    <input id="room-name-input" placeholder="Enter your Room Name"></input>
+                    <label>Map: </label>
+                    <select id="room-map-input">
+                        <option>Dessert</option>
+                        <option>Sea</option>
+                        <option>Grassland</option>
+                    </select>
+                    <button id="new-room-button">Create New Room</button>
+                    <div id="new-room-message" class="warning center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="signin-overlay" class="overlay row">
+        <div class="content shadow row">
+            <form id="signin-form" class="col">
+                <div class="caption">SIGN IN WITH YOUR ACCOUNT</div>
+                <div class="spacer-0"></div>
+                <input id="signin-username" placeholder="Enter your username"></input>
+                <input id="signin-password" type="password" placeholder="Enter your password"></input>
+                <div class="spacer-0"></div>
+                <button type="submit">Sign In</button>
+                <div id="signin-message" class="warning center"></div>
+                <div class="spacer-grow"></div>
+            </form>
+
+            <div class="spacer-0"></div>
+
+            <form id="register-form" class="col">
+                <div class="caption">OR, REGISTER IF YOU DO NOT HAVE ONE</div>
+                <div class="spacer-0"></div>
+                <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
+                <select id="register-avatar">
+                    <option value="">Select your avatar</option>
+                </select>
+                <input id="register-name" maxlength="16" placeholder="Enter your name"></input>
+                <input id="register-password" type="password" placeholder="Enter your password"></input>
+                <input id="register-confirm" type="password" placeholder="Enter your password again"></input>
+                <div class="spacer-0"></div>
+                <button type="submit">Register</button>
+                <div id="register-message" class="warning center"></div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.min.js"></script>
+    <script src="scripts/socket.js"></script>
+    <script src="scripts/avatar.js"></script>
+    <script src="scripts/ui.js"></script>
+    <script src="scripts/registration.js"></script>
+    <script src="scripts/authentication.js"></script>
+    <script src="scripts/rooms.js"></script>
+    <script>
+    $(document).ready(function() {
+        // Initialize the UI
+        UI.initialize();
+
+        // Validate the signin
+        Authentication.validate(
+            () => {
+                SignInForm.hide();
+                UserPanel.update(Authentication.getUser());
+                UserPanel.show();
+
+                Socket.connect();
+            },
+            () => { SignInForm.show(); }
+        );
+    });
+    </script>
+</body>
+</html>
