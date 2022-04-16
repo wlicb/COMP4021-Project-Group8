@@ -267,35 +267,6 @@ io.on("connection", (socket) => {
         socket.emit("users", JSON.stringify(onlineUsers));
     });
 
-    socket.on("get messages", () => {
-        // Send the chatroom messages to the browser
-        const chatroom = JSON.parse(fs.readFileSync("./data/chatroom.json", "utf-8"));
-        socket.emit("messages", JSON.stringify(chatroom));
-    });
-
-    socket.on("post message", (content) => {
-        // Add the message to the chatroom
-        const message = { user: socket.request.session.user, datetime: new Date(), content: content};
-        const chatroom = JSON.parse(fs.readFileSync("./data/chatroom.json", "utf-8"));
-        chatroom.push(message);
-        io.emit("add message", JSON.stringify(message));
-        fs.writeFileSync("./data/chatroom.json", JSON.stringify(chatroom, null, " "));
-    });
-
-    socket.on("typing", () => {
-        const name = socket.request.session.user.name;
-        if (!(typingUsers.includes(name))) {
-            typingUsers.push(name);
-            io.emit("show typing", name);
-            // console.log(typingUsers);
-        }
-    });
-
-    socket.on("stop typing", () => {
-        const name = socket.request.session.user.name;
-        io.emit("clear typing", name);
-        typingUsers.pop(name);
-    });
 
     socket.on("update room", (room) => {
         const rooms = JSON.parse(fs.readFileSync("./data/rooms.json", "utf-8"));
