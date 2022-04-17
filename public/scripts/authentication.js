@@ -46,6 +46,8 @@ const Authentication = (function() {
         .catch((err) => {
             console.log("Error!");
         });
+
+
     };
 
     // This function sends a validate request to the server
@@ -97,7 +99,18 @@ const Authentication = (function() {
         })
         .catch((error) => {
             console.log("Error!");
-        })
+        });
+        
+        // if (Rooms.currentRoom != null) {
+            console.log(Rooms.getRoom());
+            Rooms.leaveRoom(Rooms.getRoom(), 
+                (rooms) => {
+                    update(rooms);
+                },
+                (error) => {
+                    $("#new-room-message").text(error);
+                })
+        // }
     };
 
     return { getUser, signin, validate, signout };

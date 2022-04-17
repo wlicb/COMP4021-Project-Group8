@@ -31,6 +31,12 @@ const Socket = (function() {
             // console.log(rooms);
             RoomPanel.update(rooms);
         });
+
+        socket.on("get into game", (room) => {
+            if (Rooms.getRoom().name == room.name) {
+                UI.startGame();
+            }
+        })
     };
 
     // This function disconnects the socket from the server
@@ -59,6 +65,9 @@ const Socket = (function() {
         socket.emit("update room", room);
     };
 
+    const startGame = function(room) {
+        socket.emit("start game", room);
+    }
 
-    return { getSocket, connect, disconnect, postMessage, reportTyping, stopTyping, updateRoom };
+    return { getSocket, connect, disconnect, postMessage, reportTyping, stopTyping, updateRoom, startGame };
 })();

@@ -279,6 +279,11 @@ io.on("connection", (socket) => {
         const rooms = JSON.parse(fs.readFileSync("./data/rooms.json", "utf-8"));
         socket.emit("show initial rooms", rooms);
     });
+
+    socket.on("start game", (room) => {
+        // console.log(room);
+        io.emit("get into game", room);
+    })
     
 })
 

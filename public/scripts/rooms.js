@@ -3,7 +3,7 @@ const Rooms = (function() {
     let currentRoom = null;
 
     const getRoom = function() {
-        return room;
+        return currentRoom;
     }
 
     const createRoom = function(room, onSuccess, onError, onAlreadyIn) {
@@ -31,6 +31,8 @@ const Rooms = (function() {
     };
 
     const leaveRoom = function(room, onSuccess, onError) {
+        if (room == null)
+            return;
         fetch("/leaveRoom", {
             method: "POST",
             headers: {"Content-Type": 
@@ -63,6 +65,13 @@ const Rooms = (function() {
                 if (json.status == "success") {
                     onSuccess(json.rooms);
                     currentRoom = room;
+                    console.log(room);
+                    console.log(currentRoom);
+                    for (const r of json.rooms) {
+                        if ((r.name == room.name) && (r.user1 != "-") && (r.user2 != "-")) {
+                            Socket.startGame(currentRoom);
+                        }        
+                    }
                 }
                 else if (onError) onError(json.error);
                 

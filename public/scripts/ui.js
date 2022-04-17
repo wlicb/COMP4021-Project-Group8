@@ -189,9 +189,10 @@ const RoomPanel = (function() {
 
         // Add the rooms one-by-one
         for (const room of rooms) {
-            console.log(room);
+            // console.log(room);
 			addRoom(room);
         }
+        console.log(Rooms.getRoom());
     };
 
     // This function adds a new message at the end of the chatroom
@@ -269,5 +270,13 @@ const UI = (function() {
         }
     };
 
-    return { getUserDisplay, initialize };
+    const startGame = function() { 
+        $("#container").hide();
+        $("#game-panel").show();
+        setTimeout(() => {
+            $("#join-overlay").hide();
+        });
+    }
+
+    return { getUserDisplay, initialize, startGame };
 })();
