@@ -48,5 +48,10 @@
   "avatar": "Hedgehog",
   "name": "__k",
   "password": "$2b$10$KKOvgZVMLsB3sUXX1o.DEO8.U1o.CIkjcNwehvCcMJWFEbEyh03lq"
+ },
+ "zaki": {
+  "avatar": "Koala",
+  "name": "zaki",
+  "password": "$2b$10$QOvnjtxtYLQ2CSgFnE93zekBK6VK.8yWwuliyy8hyZiU7tZiV.hw6"
  }
 }
