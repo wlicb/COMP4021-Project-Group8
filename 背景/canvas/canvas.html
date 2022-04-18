@@ -102,6 +102,7 @@
     <script src="bounding_box.js"></script>
     <script src="sprite.js"></script>
     <script src="player.js"></script>
+    <script src="player_blue.js"></script>
     <script src="gem.js"></script>
     <script src="fire.js"></script>
     <script>
@@ -119,7 +120,8 @@
         const gameArea = BoundingBox(context, 0, 0, 720, 720);
 
         /* Create the sprites in the game */
-        const player = Player(context, 427, 240, gameArea); // The player
+        // const player = Player(context, 427, 240, gameArea); // The player
+        const player = Player_blue(context, 427, 240, gameArea);
         const gem = Gem(context, 427, 350, "green");        // The gem
         const cell = 60;
         const fires = [
@@ -226,11 +228,12 @@
             context.clearRect(0, 0, cv.width, cv.height);
 
             /* Draw the sprites */
-            gem.draw();
-            player.draw();
             for(var i=0; i<fires.length;i++){
                 fires[i].draw(now);
             }
+            gem.draw();
+            player.draw();
+            
             /* Process the next frame */
             requestAnimationFrame(doFrame);
         }
