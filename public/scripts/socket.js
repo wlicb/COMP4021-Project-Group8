@@ -34,7 +34,14 @@ const Socket = (function() {
 
         socket.on("get into game", (room) => {
             if (Rooms.getRoom().name == room.name) {
-                UI.startGame();
+                document.location.href = "/background/canvas/canvas.html";
+                // fetch("/background/canvas/canvas.html").then((res) => res.text())
+                // .then((html) => {
+                //     console.log(html);
+                //     document.body.innerHTML = html
+                // }).catch(function(err) {  
+                //     console.log('Failed to fetch page: ', err);  
+                // });
             }
         })
     };
