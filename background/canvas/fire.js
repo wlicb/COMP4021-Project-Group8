@@ -2,7 +2,7 @@
 // - `ctx` - A canvas context for drawing
 // - `x` - The initial x position of the gem
 // - `y` - The initial y position of the gem
-const Fire = function(ctx, x, y) {
+const Box = function(ctx, x, y) {
 
     const sequences = { direction: 0, x: 0, y: 10, width: 40, height: 40, count: 1, timing: 200, loop: false};
 
