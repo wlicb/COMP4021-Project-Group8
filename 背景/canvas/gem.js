@@ -8,10 +8,10 @@ const Gem = function(ctx, x, y, color) {
     // This is the sprite sequences of the gem of four colours
     // `green`, `red`, `yellow` and `purple`.
     const sequences = {
-        green:  { direction: 0, x: 192, y:  0, width: 16, height: 16, count: 4, timing: 200, loop: true },
-        red:    { direction: 0, x: 192, y: 16, width: 16, height: 16, count: 4, timing: 200, loop: true },
-        yellow: { direction: 0, x: 192, y: 32, width: 16, height: 16, count: 4, timing: 200, loop: true },
-        purple: { direction: 0, x: 192, y: 48, width: 16, height: 16, count: 4, timing: 200, loop: true }
+        green:  { direction: 0, x: 0, y:  0, width: 38, height: 38, count: 1, timing: 200, loop: true },
+        red:    { direction: 0, x: 0, y: 0, width: 38, height: 38, count: 1, timing: 200, loop: true },
+        yellow: { direction: 0, x: 0, y: 0, width: 38, height: 38, count: 1, timing: 200, loop: true },
+        purple: { direction: 0, x: 0, y: 0, width: 38, height: 38, count: 1, timing: 200, loop: true }
     };
 
     // This is the sprite object of the gem created from the Sprite module.
@@ -19,9 +19,9 @@ const Gem = function(ctx, x, y, color) {
 
     // The sprite object is configured for the gem sprite here.
     sprite.setSequence(sequences[color])
-          .setScale(2)
+          .setScale(1.5)
           .setShadowScale({ x: 0.75, y: 0.2 })
-          .useSheet("object_sprites.png");
+          .useSheet("gem.png");
 
     // This is the birth time of the gem for finding its age.
     let birthTime = performance.now();
