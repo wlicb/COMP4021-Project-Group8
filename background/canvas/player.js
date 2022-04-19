@@ -3,23 +3,23 @@
 // - `x` - The initial x position of the player
 // - `y` - The initial y position of the player
 // - `gameArea` - The bounding box of the game area
-const Player_blue = function(ctx, x, y, gameArea) {
+const Player = function(ctx, x, y, gameArea) {
 
     // This is the sprite sequences of the player facing different directions.
     // It contains the idling sprite sequences `idleLeft`, `idleUp`, `idleRight` and `idleDown`,
     // and the moving sprite sequences `moveLeft`, `moveUp`, `moveRight` and `moveDown`.
     const sequences = {
         /* Idling sprite sequences for facing different directions */
-        idleLeft:  { direction: 0, x: 375, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
-        idleUp:    { direction: 1, x: 375, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
-        idleRight: { direction: 0, x: 375, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
-        idleDown:  { direction: 1, x: 375, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
+        idleLeft:  { direction: 0, x: 368, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
+        idleUp:    { direction: 1, x: 368, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
+        idleRight: { direction: 0, x: 368, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
+        idleDown:  { direction: 1, x: 368, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
 
         /* Moving sprite sequences for facing different directions */
-        moveLeft:  { direction: 0, x: 254, y: 500, width: 68, height: 66, count: 4, timing: 50, loop: true },
-        moveUp:    { direction: 1, x: 60,  y: 130, width: 68, height: 70, count: 4, timing: 50, loop: true },
-        moveRight: { direction: 0, x: 254, y: 130, width: 68, height: 66, count: 4, timing: 50, loop: true },
-        moveDown:  { direction: 1, x: 130, y: 130, width: 68, height: 70, count: 4, timing: 50, loop: true }
+        moveLeft:  { direction: 0, x: 210, y: 130, width: 68, height: 66, count: 4, timing: 50, loop: true },
+        moveUp:    { direction: 1, x: 70,  y: 130, width: 68, height: 70, count: 4, timing: 50, loop: true },
+        moveRight: { direction: 0, x: 210, y: 200, width: 68, height: 66, count: 4, timing: 50, loop: true },
+        moveDown:  { direction: 1, x: 140, y: 130, width: 68, height: 70, count: 4, timing: 50, loop: true }
     };
 
     // This is the sprite object of the player created from the Sprite module.
@@ -29,7 +29,7 @@ const Player_blue = function(ctx, x, y, gameArea) {
     sprite.setSequence(sequences.idleDown)
           .setScale(1)
           .setShadowScale({ x: 0.75, y: 0.20 })
-          .useSheet("unit_blue.png");
+          .useSheet("unit_red.png");
 
     // This is the moving direction, which can be a number from 0 to 4:
     // - `0` - not moving
