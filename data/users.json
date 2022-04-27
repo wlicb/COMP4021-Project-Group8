@@ -52,6 +52,15 @@
  "zaki": {
   "avatar": "Koala",
   "name": "zaki",
+<<<<<<< Updated upstream
   "password": "$2b$10$QOvnjtxtYLQ2CSgFnE93zekBK6VK.8yWwuliyy8hyZiU7tZiV.hw6"
+=======
+  "password": "$2b$10$qK//oWTsJSUtdnjEOttVnOPB2KYV/t01eha7wFo1kwbBn5sFuksGO"
+ },
+ "lol": {
+  "avatar": "Rabbit",
+  "name": "lol",
+  "password": "$2b$10$uzb0sdOjlH/pTEzmyO35UOLinj8wh4Vk.SLuw/4IWPQfrHY98m.Ti"
+>>>>>>> Stashed changes
  }
 }

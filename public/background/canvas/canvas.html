@@ -105,6 +105,7 @@
     <script src="./resources/player_blue.js"></script>
     <script src="./resources/gem.js"></script>
     <script src="./resources/banana.js"></script>
+    <script src="./resources/bomb.js"></script>
     <script src="./resources/box.js"></script>
     <script>
     $(document).ready(function() {
@@ -116,7 +117,7 @@
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
         let gameStartTime = 0;      // The timestamp when the game starts
         let collectedGems = 0;      // The number of gems collected in the game
-
+            let hp = 3;
         /* Create the game area */
         const gameArea = BoundingBox(context, 0, 0, 720, 720);
 
@@ -125,6 +126,7 @@
         const player = Player_blue(context, 0, 0, gameArea);
         const gem = Gem(context, 427, 350, "green");        // The gem
             const banana = Banana(context, 427, 350, "green"); 
+            const bomb = Bomb(context, 427, 350, "green"); 
         const cell = 60;
         const boxes = [
             Box(context, gameArea.getLeft() + 30 + cell*1, gameArea.getTop() + 30 + cell*1),
@@ -201,7 +203,8 @@
             /* TODO */
             /* Handle the game over situation here */
             if(timeRemaining == 0){
-                $("#final-gems").text(collectedGems);
+                //$("#final-gems").text(collectedGems);
+                    $("#final-gems").text(collectedGems+" "+hp);
                 $("#game-over").show();
                 return;
             }
@@ -209,6 +212,7 @@
             /* Update the sprites */
             gem.update(now);
                 banana.update(now);
+                bomb.update(now);
             player.update(now, boxes, boxes.length);
             // console.log("there");
             // console.log("here");
@@ -222,7 +226,12 @@
             // console.log(now);
             if(gem.getAge(now) >= gemMaxAge){
                 gem.randomize(gameArea, boxes, boxes.length);
-                
+            }
+            if(banana.getAge(now) >= gemMaxAge){
+                banana.randomize(gameArea, boxes, boxes.length);
+            }
+            if(bomb.getAge(now) >= gemMaxAge){
+                bomb.randomize(gameArea, boxes, boxes.length);
             }
             // console.log(gem.getXY());
             // console.log(gem.getXY()[1]);
@@ -230,6 +239,14 @@
                 collectedGems++;
                 gem.randomize(gameArea, boxes, boxes.length);
             }
+                if(player.getBoundingBox().isPointInBox(banana.getXY()["x"],banana.getXY()["y"])){
+                    hp++;
+                    banana.randomize(gameArea, boxes, boxes.length);
+                }
+                if(player.getBoundingBox().isPointInBox(bomb.getXY()["x"],bomb.getXY()["y"])){
+                    hp--;
+                    bomb.randomize(gameArea, boxes, boxes.length);
+                }
             /* Clear the screen */
             context.clearRect(0, 0, cv.width, cv.height);
 
@@ -240,6 +257,7 @@
             gem.draw();
             player.draw();
                 banana.draw();
+                bomb.draw();
             /* Process the next frame */
             requestAnimationFrame(doFrame);
         }
