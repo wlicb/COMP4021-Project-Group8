@@ -104,6 +104,7 @@
     <script src="./resources/player.js"></script>
     <script src="./resources/player_blue.js"></script>
     <script src="./resources/gem.js"></script>
+    <script src="./resources/banana.js"></script>
     <script src="./resources/box.js"></script>
     <script>
     $(document).ready(function() {
@@ -123,6 +124,7 @@
         // const player = Player(context, 427, 240, gameArea); // The player
         const player = Player_blue(context, 0, 0, gameArea);
         const gem = Gem(context, 427, 350, "green");        // The gem
+            const banana = Banana(context, 427, 350, "green"); 
         const cell = 60;
         const boxes = [
             Box(context, gameArea.getLeft() + 30 + cell*1, gameArea.getTop() + 30 + cell*1),
@@ -206,6 +208,7 @@
 
             /* Update the sprites */
             gem.update(now);
+                banana.update(now);
             player.update(now, boxes, boxes.length);
             // console.log("there");
             // console.log("here");
@@ -236,7 +239,7 @@
             }
             gem.draw();
             player.draw();
-            
+                banana.draw();
             /* Process the next frame */
             requestAnimationFrame(doFrame);
         }
