@@ -234,16 +234,6 @@ const RoomPanel = (function() {
         });
     };
 
-    // const joinRoom = function(room) {
-    //     const roomElement = $("#room-" + room.name + "");
-    //     const user1 = roomElement.find($("#user-name1"));
-    //     if (user1 != "-") {
-    //         room.user1 = Authentication.getUser().name;
-    //         user1.text(Authentication.getUser().name);
-    //     } else if (user2) {
-
-    //     }
-    // }
     const removeRoom = function(room) {
         $("#room" + room.name + "").remove();
     }
@@ -270,13 +260,5 @@ const UI = (function() {
         }
     };
 
-    const startGame = function() { 
-        $("#container").hide();
-        $("#game-panel").show();
-        setTimeout(() => {
-            $("#join-overlay").hide();
-        });
-    }
-
-    return { getUserDisplay, initialize, startGame };
+    return { getUserDisplay, initialize };
 })();
