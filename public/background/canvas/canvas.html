@@ -2,10 +2,12 @@
 <html>
 <head>
     <title>Pop Battle!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap" rel="stylesheet">
     <style>
     body {
-        font-family: "Press Start 2P", sans-serif;
+        font-family: "Josefin Sans", sans-serif;
+        /* background: linear-gradient(white, #BE8C63); */
+        background: #BE8C63;
     }
     #game-container {
         position: relative;
@@ -20,14 +22,15 @@
     }
     canvas, #game-start, #game-over {
         border: 1px solid gray;
-        width: 720px;
-        height: 720px;
+        width: 700px;
+        height: 700px;
     }
     canvas {
         background: url("./resources/background.jpg");
         background-size: cover;
         background-position: center;
         margin: auto;
+        align-items: center;
         /* margin-top:3%; */
         /* margin-right: 15%; */
         /* margin-left: 15%; */
@@ -37,7 +40,7 @@
         background: rgba(1, 1, 1, 0.8);
     }
     #counter text {
-        font-size: 130%;
+        font-size: 200%;
         fill: white;
         stroke: black;
         stroke-width: 1px;
@@ -49,7 +52,8 @@
     }
     #game-start #game-title {
         font-size: 400%;
-        fill: url(#title-fill);
+
+        /* fill: url(#title-fill); */
         stroke: black;
     }
     #game-over text {
@@ -78,7 +82,7 @@
                     <stop offset="0.8" stop-color="purple" />
                 </linearGradient>
             </defs>
-            <text id="game-title" x="50%" y="45%">GEM RUSH!</text>
+            <text id="game-title" x="50%" y="45%">POP BATTLE!</text>
             <text x="50%" y="60%">Click here to start the game</text>
         </svg>
 

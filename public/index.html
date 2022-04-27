@@ -9,19 +9,18 @@
 <body>
     <div id="container" class="col">
         <div id="header" class="row">
-            <div id="title">Rooms</div>
-
+            <div id="title">Find a Room!</div>
             <div class="spacer-grow"></div>
 
             <div id="user-panel" class="row">
                 <div class="field-content row shadow">
-                    <span class="user-name">-</span>
+                    <span class="user-name">Current User: -</span>
                 </div>
                 <button id="signout-button" class="icon"><span class="material-icons">logout</span></button>
             </div>
         </div>
         <div id="main-panel" class="row">
-            <div id="chat-panel" class="col">
+            <div id="room-panel" class="col">
                 <div id="room-area" class="col"></div>
             </div>
 
@@ -31,9 +30,9 @@
                     <input id="room-name-input" placeholder="Enter your Room Name"></input>
                     <label>Map: </label>
                     <select id="room-map-input">
-                        <option>Dessert</option>
-                        <option>Sea</option>
-                        <option>Grassland</option>
+                        <option style="color: gold">Dessert</option>
+                        <option style="color: skyblue">Sea</option>
+                        <option style="color: #7ec850">Grassland</option>
                     </select>
                     <button id="new-room-button">Create New Room</button>
                     <div id="new-room-message" class="warning center"></div>
@@ -41,11 +40,14 @@
             </div>
         </div>
     </div>
-
+    <div id="start-overlay" class="overlay row" style="display: none;">
+        <p style="font-size: 80px; align-items: center;">POP BATTLE GAME</p><br>
+        <p id="go-into-game-button" style="font-size: 50px; align-items: center;">CLICK HERE TO START!</p>
+    </div>
     <div id="signin-overlay" class="overlay row">
         <div class="content shadow row">
             <form id="signin-form" class="col">
-                <div class="caption">SIGN IN WITH YOUR ACCOUNT</div>
+                <div class="caption">SIGN IN</div>
                 <div class="spacer-0"></div>
                 <input id="signin-username" placeholder="Enter your username"></input>
                 <input id="signin-password" type="password" placeholder="Enter your password"></input>
@@ -58,7 +60,7 @@
             <div class="spacer-0"></div>
 
             <form id="register-form" class="col">
-                <div class="caption">OR, REGISTER IF YOU DO NOT HAVE ONE</div>
+                <div class="caption">HAVEN'T GOT AN ACCOUNT? REGISTER HERE:</div>
                 <div class="spacer-0"></div>
                 <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
                 <select id="register-avatar">
@@ -89,13 +91,14 @@
         // Validate the signin
         Authentication.validate(
             () => {
+                StartOverlay.hide();
                 SignInForm.hide();
                 UserPanel.update(Authentication.getUser());
                 UserPanel.show();
 
                 Socket.connect();
             },
-            () => { SignInForm.show(); }
+            () => { StartOverlay.show(); }
         );
     });
     </script>
