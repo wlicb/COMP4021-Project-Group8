@@ -43,7 +43,7 @@ const Socket = (function() {
                 //     console.log('Failed to fetch page: ', err);  
                 // });
             }
-        })
+        });
     };
 
     // This function disconnects the socket from the server
@@ -74,7 +74,8 @@ const Socket = (function() {
 
     const startGame = function(room) {
         socket.emit("start game", room);
-    }
+    };
+
 
     return { getSocket, connect, disconnect, postMessage, reportTyping, stopTyping, updateRoom, startGame };
 })();

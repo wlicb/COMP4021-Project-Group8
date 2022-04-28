@@ -62,6 +62,11 @@ const Avatar = (function() {
             "Scorpion": "&#129410;",
             "Mosquito": "&#129439;",
             "Microbe": "&#129440;"
+        },
+        "Maps" : {
+            "Dessert": "&#127964;",
+            "Sea" : "&#129482;",
+            "GrassLand" : "&#127966;"
         }
     };
 
