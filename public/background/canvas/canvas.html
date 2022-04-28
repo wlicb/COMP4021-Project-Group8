@@ -128,9 +128,9 @@
         /* Create the sprites in the game */
         // const player = Player(context, 427, 240, gameArea); // The player
         const player = Player_blue(context, 0, 0, gameArea);
-        const gem = Gem(context, 427, 350, "green");        // The gem
-            const banana = Banana(context, 427, 350, "green"); 
-            const bomb = Bomb(context, 427, 350, "green"); 
+        const gem = Gem(context, 350, 350, "green");        // The gem
+            const banana = Banana(context, 350, 350, "green"); 
+            const bomb = Bomb(context, 350, 350, "green"); 
         const cell = 60;
         const boxes = [
             Box(context, gameArea.getLeft() + 30 + cell*1, gameArea.getTop() + 30 + cell*1),
@@ -141,7 +141,7 @@
 
             Box(context, gameArea.getLeft() + 30 + cell*2, gameArea.getTop() + 30 + cell*5),
             Box(context, gameArea.getLeft() + 30 + cell*3, gameArea.getTop() + 30 + cell*5),
-            Box(context, gameArea.getLeft() + 30 + cell*4, gameArea.getTop() + 30 + cell*5),
+            // Box(context, gameArea.getLeft() + 30 + cell*4, gameArea.getTop() + 30 + cell*5),
             Box(context, gameArea.getLeft() + 30 + cell*6, gameArea.getTop() + 30 + cell*5),
             Box(context, gameArea.getLeft() + 30 + cell*7, gameArea.getTop() + 30 + cell*5),
             Box(context, gameArea.getLeft() + 30 + cell*8, gameArea.getTop() + 30 + cell*5),
