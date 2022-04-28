@@ -8,10 +8,10 @@ const Banana = function(ctx, x, y, color) {
     // This is the sprite sequences of the gem of four colours
     // `green`, `red`, `yellow` and `purple`.
     const sequences = {
-        green:  { direction: 0, x: 0, y:  0, width: 38, height: 38, count: 1, timing: 200, loop: false },
-        red:    { direction: 0, x: 0, y:  0, width: 38, height: 38, count: 1, timing: 200, loop: false },
-        yellow: { direction: 0, x: 0, y:  0, width: 38, height: 38, count: 1, timing: 200, loop: false },
-        purple: { direction: 0, x: 0, y:  0, width: 38, height: 38, count: 1, timing: 200, loop: false }
+        green:  { direction: 0, x: 0, y:  0, width: 23, height: 21, count: 1, timing: 200, loop: false },
+        red:    { direction: 0, x: 0, y:  0, width: 23, height: 21, count: 1, timing: 200, loop: false },
+        yellow: { direction: 0, x: 0, y:  0, width: 23, height: 21, count: 1, timing: 200, loop: false },
+        purple: { direction: 0, x: 0, y:  0, width: 23, height: 21, count: 1, timing: 200, loop: false }
     };
 
     // This is the sprite object of the gem created from the Sprite module.
@@ -19,7 +19,7 @@ const Banana = function(ctx, x, y, color) {
     
     // The sprite object is configured for the gem sprite here.
     sprite.setSequence(sequences[color])
-          .setScale(1)
+          .setScale(1.5)
           .setShadowScale({ x: 0.75, y: 0.2 })
           .useSheet("./resources/banana.png");
 
