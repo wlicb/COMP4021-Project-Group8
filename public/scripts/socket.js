@@ -42,6 +42,10 @@ const Socket = (function() {
                 // }).catch(function(err) {  
                 //     console.log('Failed to fetch page: ', err);  
                 // });
+                if (room.user1 == Authentication.getUser().name)
+                    document.cookie = "player=1; expires=Sun, 01 Jan 2023 00:00:00 GMT";
+                else if (room.user2 == Authentication.getUser().name)
+                    document.cookie = "player=2; expires=Sun, 01 Jan 2023 00:00:00 GMT";
             }
         });
     };
