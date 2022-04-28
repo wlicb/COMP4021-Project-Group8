@@ -39,6 +39,8 @@ const Authentication = (function() {
         .then((json) => {
             if (json.status == "success") {
                 user = json.user;
+                // document.cookie = "user=" + user.name + "; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+
                 onSuccess();
             }
             else if (onError) onError(json.error);

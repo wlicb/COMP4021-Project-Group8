@@ -105,12 +105,15 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="./resources/bounding_box.js"></script>
     <script src="./resources/sprite.js"></script>
-    <script src="./resources/player.js"></script>
+    <script src="./resources/player_red.js"></script>
     <script src="./resources/player_blue.js"></script>
     <script src="./resources/gem.js"></script>
     <script src="./resources/banana.js"></script>
     <script src="./resources/bomb.js"></script>
     <script src="./resources/box.js"></script>
+    <script src="/scripts/rooms.js"></script>
+    <script src="/scripts/socket.js"></script>
+    <script src="/scripts/authentication.js"></script>
     <script>
     $(document).ready(function() {
         /* Get the canvas and 2D context */
@@ -121,16 +124,26 @@
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
         let gameStartTime = 0;      // The timestamp when the game starts
         let collectedGems = 0;      // The number of gems collected in the game
-            let hp = 3;
+        let hp = 3;
         /* Create the game area */
         const gameArea = BoundingBox(context, 0, 0, 720, 720);
 
         /* Create the sprites in the game */
         // const player = Player(context, 427, 240, gameArea); // The player
-        const player = Player_blue(context, 0, 0, gameArea);
+        const player_red = Player_red(context, 680, 680, gameArea);
+        const player_blue = Player_blue(context, 20, 20, gameArea);
+        let player;
+        // console.log(Rooms);
+        const user = document.cookie;
+        console.log(user);
+        if (user == "player=1") {
+            player = player_red;
+        } else {
+            player = player_blue;
+        }
         const gem = Gem(context, 350, 350, "green");        // The gem
-            const banana = Banana(context, 350, 350, "green"); 
-            const bomb = Bomb(context, 350, 350, "green"); 
+        const banana = Banana(context, 350, 350, "green"); 
+        const bomb = Bomb(context, 350, 350, "green"); 
         const cell = 60;
         const boxes = [
             Box(context, gameArea.getLeft() + 30 + cell*1, gameArea.getTop() + 30 + cell*1),
@@ -215,8 +228,9 @@
 
             /* Update the sprites */
             gem.update(now);
-                banana.update(now);
-                bomb.update(now);
+            banana.update(now);
+            bomb.update(now);
+            player.update(now, boxes, boxes.length);
             player.update(now, boxes, boxes.length);
             // console.log("there");
             // console.log("here");
@@ -259,9 +273,10 @@
                 boxes[i].draw(now);
             }
             gem.draw();
-            player.draw();
-                banana.draw();
-                bomb.draw();
+            player_red.draw();
+            player_blue.draw();
+            banana.draw();
+            bomb.draw();
             /* Process the next frame */
             requestAnimationFrame(doFrame);
         }

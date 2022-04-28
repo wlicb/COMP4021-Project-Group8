@@ -69,6 +69,10 @@ const Rooms = (function() {
                     console.log(currentRoom);
                     for (const r of json.rooms) {
                         if ((r.name == room.name) && (r.user1 != "-") && (r.user2 != "-")) {
+                            if (r.user1 == Authentication.getUser().name)
+                                document.cookie = "player=1; expires=Thu, 01 Jan 2023 00:00:00 GMT";
+                            else if (r.user2 == Authentication.getUser().name)
+                                document.cookie = "player=2; expires=Thu, 01 Jan 2023 00:00:00 GMT";
                             Socket.startGame(currentRoom);
                         }        
                     }
