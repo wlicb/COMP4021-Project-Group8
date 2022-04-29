@@ -126,12 +126,12 @@
         let collectedGems = 0;      // The number of gems collected in the game
         let hp = 3;
         /* Create the game area */
-        const gameArea = BoundingBox(context, 0, 0, 720, 720);
+        const gameArea = BoundingBox(context, 30, 30, 690, 690);
 
         /* Create the sprites in the game */
         // const player = Player(context, 427, 240, gameArea); // The player
-        const player_red = Player_red(context, 680, 680, gameArea);
-        const player_blue = Player_blue(context, 20, 20, gameArea);
+        const player_red = Player_red(context, 690, 690, gameArea);
+        const player_blue = Player_blue(context, 30, 30, gameArea);
         let player;
         // console.log(Rooms);
         const user = document.cookie;
@@ -145,66 +145,68 @@
         const banana = Banana(context, 350, 350, "green"); 
         const bomb = Bomb(context, 350, 350, "green"); 
         const cell = 60;
+        const x_0 = gameArea.getLeft();
+        const y_0 = gameArea.getTop();
         const boxes = [
-            Box(context, gameArea.getLeft() + 30 + cell*1, gameArea.getTop() + 30 + cell*1),
-            Box(context, gameArea.getLeft() + 30 + cell*1, gameArea.getTop() + 30 + cell*2),
-            Box(context, gameArea.getLeft() + 30 + cell*2, gameArea.getTop() + 30 + cell*1),
-            Box(context, gameArea.getLeft() + 30 + cell*2, gameArea.getTop() + 30 + cell*3),
-            Box(context, gameArea.getLeft() + 30 + cell*2, gameArea.getTop() + 30 + cell*4),
+            Box(context, x_0 + cell*1, y_0 + cell*1),
+            Box(context, x_0 + cell*1, y_0 + cell*2),
+            Box(context, x_0 + cell*2, y_0 + cell*1),
+            Box(context, x_0 + cell*2, y_0 + cell*3),
+            Box(context, x_0 + cell*2, y_0 + cell*4),
 
-            Box(context, gameArea.getLeft() + 30 + cell*2, gameArea.getTop() + 30 + cell*5),
-            Box(context, gameArea.getLeft() + 30 + cell*3, gameArea.getTop() + 30 + cell*5),
-            // Box(context, gameArea.getLeft() + 30 + cell*4, gameArea.getTop() + 30 + cell*5),
-            Box(context, gameArea.getLeft() + 30 + cell*6, gameArea.getTop() + 30 + cell*5),
-            Box(context, gameArea.getLeft() + 30 + cell*7, gameArea.getTop() + 30 + cell*5),
-            Box(context, gameArea.getLeft() + 30 + cell*8, gameArea.getTop() + 30 + cell*5),
+            Box(context, x_0 + cell*2, y_0 + cell*5),
+            Box(context, x_0 + cell*3, y_0 + cell*5),
+            // Box(context, x_0 + cell*4, y_0 + cell*5),
+            Box(context, x_0 + cell*6, y_0 + cell*5),
+            Box(context, x_0 + cell*7, y_0 + cell*5),
+            Box(context, x_0 + cell*8, y_0 + cell*5),
 
-            Box(context, gameArea.getLeft() + 30 + cell*6, gameArea.getTop() + 30 + cell*6),
+            Box(context, x_0 + cell*6, y_0 + cell*6),
 
-            Box(context, gameArea.getLeft() + 30 + cell*1, gameArea.getTop() + 30 + cell*7),
-            Box(context, gameArea.getLeft() + 30 + cell*2, gameArea.getTop() + 30 + cell*7),
-            Box(context, gameArea.getLeft() + 30 + cell*3, gameArea.getTop() + 30 + cell*7),
-            Box(context, gameArea.getLeft() + 30 + cell*4, gameArea.getTop() + 30 + cell*7),
-            Box(context, gameArea.getLeft() + 30 + cell*6, gameArea.getTop() + 30 + cell*7),
+            Box(context, x_0 + cell*1, y_0 + cell*7),
+            Box(context, x_0 + cell*2, y_0 + cell*7),
+            Box(context, x_0 + cell*3, y_0 + cell*7),
+            Box(context, x_0 + cell*4, y_0 + cell*7),
+            Box(context, x_0 + cell*6, y_0 + cell*7),
 
-            Box(context, gameArea.getLeft() + 30 + cell*1, gameArea.getTop() + 30 + cell*8),
-            Box(context, gameArea.getLeft() + 30 + cell*6, gameArea.getTop() + 30 + cell*8),
-            Box(context, gameArea.getLeft() + 30 + cell*8, gameArea.getTop() + 30 + cell*8),
-            Box(context, gameArea.getLeft() + 30 + cell*9, gameArea.getTop() + 30 + cell*8),
-            Box(context, gameArea.getLeft() + 30 + cell*10, gameArea.getTop() + 30 + cell*8),
-            Box(context, gameArea.getLeft() + 30 + cell*11, gameArea.getTop() + 30 + cell*8),
+            Box(context, x_0 + cell*1, y_0 + cell*8),
+            Box(context, x_0 + cell*6, y_0 + cell*8),
+            Box(context, x_0 + cell*8, y_0 + cell*8),
+            Box(context, x_0 + cell*9, y_0 + cell*8),
+            Box(context, x_0 + cell*10, y_0 + cell*8),
+            Box(context, x_0 + cell*11, y_0 + cell*8),
 
-            Box(context, gameArea.getLeft() + 30 + cell*1, gameArea.getTop() + 30 + cell*9),
-            Box(context, gameArea.getLeft() + 30 + cell*3, gameArea.getTop() + 30 + cell*9),
-            Box(context, gameArea.getLeft() + 30 + cell*4, gameArea.getTop() + 30 + cell*9),
-            Box(context, gameArea.getLeft() + 30 + cell*5, gameArea.getTop() + 30 + cell*9),
-            Box(context, gameArea.getLeft() + 30 + cell*6, gameArea.getTop() + 30 + cell*9),
+            Box(context, x_0 + cell*1, y_0 + cell*9),
+            Box(context, x_0 + cell*3, y_0 + cell*9),
+            Box(context, x_0 + cell*4, y_0 + cell*9),
+            Box(context, x_0 + cell*5, y_0 + cell*9),
+            Box(context, x_0 + cell*6, y_0 + cell*9),
 
-            Box(context, gameArea.getLeft() + 30 + cell*1, gameArea.getTop() + 30 + cell*10),
-            Box(context, gameArea.getLeft() + 30 + cell*6, gameArea.getTop() + 30 + cell*10),
-            Box(context, gameArea.getLeft() + 30 + cell*8, gameArea.getTop() + 30 + cell*10),
-            Box(context, gameArea.getLeft() + 30 + cell*9, gameArea.getTop() + 30 + cell*10),
-            Box(context, gameArea.getLeft() + 30 + cell*10, gameArea.getTop() + 30 + cell*10),
+            Box(context, x_0 + cell*1, y_0 + cell*10),
+            Box(context, x_0 + cell*6, y_0 + cell*10),
+            Box(context, x_0 + cell*8, y_0 + cell*10),
+            Box(context, x_0 + cell*9, y_0 + cell*10),
+            Box(context, x_0 + cell*10, y_0 + cell*10),
 
-            Box(context, gameArea.getLeft() + 30 + cell*5, gameArea.getTop() + 30 + cell*0),
-            Box(context, gameArea.getLeft() + 30 + cell*5, gameArea.getTop() + 30 + cell*1),
-            Box(context, gameArea.getLeft() + 30 + cell*5, gameArea.getTop() + 30 + cell*2),
-            Box(context, gameArea.getLeft() + 30 + cell*5, gameArea.getTop() + 30 + cell*3),
+            Box(context, x_0 + cell*5, y_0 + cell*0),
+            Box(context, x_0 + cell*5, y_0 + cell*1),
+            Box(context, x_0 + cell*5, y_0 + cell*2),
+            Box(context, x_0 + cell*5, y_0 + cell*3),
 
-            Box(context, gameArea.getLeft() + 30 + cell*7, gameArea.getTop() + 30 + cell*1),
-            Box(context, gameArea.getLeft() + 30 + cell*7, gameArea.getTop() + 30 + cell*2),
-            Box(context, gameArea.getLeft() + 30 + cell*7, gameArea.getTop() + 30 + cell*3),
-            Box(context, gameArea.getLeft() + 30 + cell*8, gameArea.getTop() + 30 + cell*1),
-            Box(context, gameArea.getLeft() + 30 + cell*9, gameArea.getTop() + 30 + cell*1),
-            Box(context, gameArea.getLeft() + 30 + cell*10, gameArea.getTop() + 30 + cell*1),
+            Box(context, x_0 + cell*7, y_0 + cell*1),
+            Box(context, x_0 + cell*7, y_0 + cell*2),
+            Box(context, x_0 + cell*7, y_0 + cell*3),
+            Box(context, x_0 + cell*8, y_0 + cell*1),
+            Box(context, x_0 + cell*9, y_0 + cell*1),
+            Box(context, x_0 + cell*10, y_0 + cell*1),
 
-            Box(context, gameArea.getLeft() + 30 + cell*8, gameArea.getTop() + 30 + cell*3),
-            Box(context, gameArea.getLeft() + 30 + cell*9, gameArea.getTop() + 30 + cell*3),
-            Box(context, gameArea.getLeft() + 30 + cell*10, gameArea.getTop() + 30 + cell*3),
+            Box(context, x_0 + cell*8, y_0 + cell*3),
+            Box(context, x_0 + cell*9, y_0 + cell*3),
+            Box(context, x_0 + cell*10, y_0 + cell*3),
 
-            Box(context, gameArea.getLeft() + 30 + cell*10, gameArea.getTop() + 30 + cell*5),
-            Box(context, gameArea.getLeft() + 30 + cell*10, gameArea.getTop() + 30 + cell*6),
-            Box(context, gameArea.getLeft() + 30 + cell*11, gameArea.getTop() + 30 + cell*6),
+            Box(context, x_0 + cell*10, y_0 + cell*5),
+            Box(context, x_0 + cell*10, y_0 + cell*6),
+            Box(context, x_0 + cell*11, y_0 + cell*6),
             
         ];
         /* The main processing of the game */
