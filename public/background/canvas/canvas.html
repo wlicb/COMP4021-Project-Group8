@@ -210,12 +210,15 @@
             
         ];
         /* The main processing of the game */
+        let bombTime = 0;
+        let frozen = 0;
         function doFrame(now) {
             if (gameStartTime == 0) gameStartTime = now;
 
             /* Update the time remaining */
             const gameTimeSoFar = now - gameStartTime;
             const timeRemaining = Math.ceil((totalGameTime * 1000 - gameTimeSoFar) / 1000);
+            
             $("#time-remaining").text(timeRemaining);
 
 
@@ -234,16 +237,9 @@
             bomb.update(now);
             player.update(now, boxes, boxes.length);
             player.update(now, boxes, boxes.length);
-            // console.log("there");
-            // console.log("here");
-            // for(var i=0; i<boxes.length;i++){
-            //     boxes[i].update(now);
-            // }
             
             /* TODO */
             /* Randomize the gem and collect the gem here */
-            // console.log(gem.getAge(now));
-            // console.log(now);
             if(gem.getAge(now) >= gemMaxAge){
                 gem.randomize(gameArea, boxes, boxes.length);
             }
@@ -253,20 +249,30 @@
             if(bomb.getAge(now) >= gemMaxAge){
                 bomb.randomize(gameArea, boxes, boxes.length);
             }
-            // console.log(gem.getXY());
-            // console.log(gem.getXY()[1]);
+    
+            //player meet the items
             if(player.getBoundingBox().isPointInBox(gem.getXY()["x"],gem.getXY()["y"])){
                 collectedGems++;
                 gem.randomize(gameArea, boxes, boxes.length);
             }
-                if(player.getBoundingBox().isPointInBox(banana.getXY()["x"],banana.getXY()["y"])){
-                    hp++;
-                    banana.randomize(gameArea, boxes, boxes.length);
-                }
-                if(player.getBoundingBox().isPointInBox(bomb.getXY()["x"],bomb.getXY()["y"])){
-                    hp--;
-                    bomb.randomize(gameArea, boxes, boxes.length);
-                }
+            if(player.getBoundingBox().isPointInBox(banana.getXY()["x"],banana.getXY()["y"])){
+                hp++;
+                banana.randomize(gameArea, boxes, boxes.length);
+            }
+            if(player.getBoundingBox().isPointInBox(bomb.getXY()["x"],bomb.getXY()["y"])){
+                hp--;
+                bombTime = 30000 + gameTimeSoFar;
+                bomb.randomize(gameArea, boxes, boxes.length);
+            }
+            console.log("bombTime = "+bombTime);
+            console.log("gameTimeSoFar = "+gameTimeSoFar);
+            console.log("frozen = "+frozen);
+            if(gameTimeSoFar < bombTime){
+                frozen = 1;
+                player.stop(5);
+            }else{
+                frozen = 0;
+            }
             /* Clear the screen */
             context.clearRect(0, 0, cv.width, cv.height);
 
@@ -294,6 +300,7 @@
                 /* TODO */
                 /* Handle the key down */
                 // console.log(event.keyCode);
+                if(frozen == 0){
                 if(event.keyCode == 37||event.keyCode == 65){//go left
                     player.move(1);
                 }else if(event.keyCode == 38||event.keyCode == 87){//up
@@ -306,11 +313,13 @@
                 if (event.keyCode == 32) {
                     player.speedUp();
                 }
+                }
             });
             /* Handle the keyup of arrow keys and spacebar */
             $(document).on("keyup", function(event) {
                 /* TODO */
                 /* Handle the key up */
+                if(frozen == 0){
                 if(event.keyCode == 37||event.keyCode == 65){//go left
                     player.stop(1);
                 }else if(event.keyCode == 38||event.keyCode == 87){//up
@@ -323,6 +332,7 @@
                 if (event.keyCode == 32) {
                     player.slowDown();
                 }  
+                }
             });
             
             /* Start the game */
