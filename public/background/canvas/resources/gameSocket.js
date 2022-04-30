@@ -76,5 +76,41 @@ const GameSocket = (function() {
         socket.emit("ready", info);
     };
 
-    return { getSocket, connect, disconnect, updatePlayer, listenPlayer, updateGem, ready };
+    const speedUp = function(room, user, type) {
+        const info = { room, user, type };
+        socket.emit("speed up", info);
+    };
+
+    const listenSpeedUp = function(player) {
+        socket.on("speed up player", (info) =>{
+            console.log("alaalalala");
+            // console.log("c");
+            const { room, user, type } = info;
+            const cookies = document.cookie.split(";");
+            // console.log(document.cookie);
+            const cookieElement = {};
+            for (var i = 0; i < cookies.length; i++) {
+                const parts = cookies[i].split("=");
+                let name = parts[0];
+                if (i != 0)
+                    name = parts[0].split(" ")[1];
+                const content = parts[1];
+                cookieElement[name] = content;
+                // console.log(name);
+            }
+            const currentUser = cookieElement["player"];
+            const currentRoom = cookieElement["room"];
+            if ((room == currentRoom) && (user != currentUser)) {
+                // console.log("d");
+                if (type == 0)
+                    player.speedUp();
+                else
+                    player.slowDown();
+                // player.updateWithoutBoundary(now);
+            }
+        });
+
+    };
+
+    return { getSocket, connect, disconnect, updatePlayer, listenPlayer, updateGem, ready, speedUp, listenSpeedUp };
 })();

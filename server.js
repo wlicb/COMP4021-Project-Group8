@@ -334,6 +334,11 @@ io.on("connection", (socket) => {
         // fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
         io.emit("move gem", info);
     });
+
+    socket.on("speed up", (info) => {
+        console.log("aafdsfdsffdsf");
+        io.emit("speed up player", info);
+    });
 });
 
 // Use a web server to listen at port 8000
