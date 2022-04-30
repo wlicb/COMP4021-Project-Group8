@@ -34,6 +34,24 @@ const Socket = (function() {
 
         socket.on("get into game", (room) => {
             if (Rooms.getRoom().name == room.name) {
+                console.log(room.user1);
+                console.log(room.user2);
+                console.log(Authentication.getUser().name)
+                if (room.user1 == Authentication.getUser().name) {
+                    document.cookie = "player=1; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "player=2; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "room=; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "room=" + room.name + "; Path=/;";
+                    document.cookie = "player=1; Path=/;";
+                }
+                else if (room.user2 == Authentication.getUser().name) {
+                    document.cookie = "player=1; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "player=2; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "room=; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "room=" + room.name + "";
+                    document.cookie = "player=2; Path=/;";
+                    console.log("here");
+                }
                 document.location.href = "/background/canvas/canvas.html";
                 // fetch("/background/canvas/canvas.html").then((res) => res.text())
                 // .then((html) => {
@@ -42,10 +60,6 @@ const Socket = (function() {
                 // }).catch(function(err) {  
                 //     console.log('Failed to fetch page: ', err);  
                 // });
-                if (room.user1 == Authentication.getUser().name)
-                    document.cookie = "player=1; expires=Sun, 01 Jan 2023 00:00:00 GMT";
-                else if (room.user2 == Authentication.getUser().name)
-                    document.cookie = "player=2; expires=Sun, 01 Jan 2023 00:00:00 GMT";
             }
         });
     };

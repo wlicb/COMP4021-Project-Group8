@@ -112,13 +112,16 @@
     <script src="./resources/bomb.js"></script>
     <script src="./resources/box.js"></script>
     <script src="/scripts/rooms.js"></script>
-    <script src="/scripts/socket.js"></script>
+    <script src="./resources/gameSocket.js"></script>
     <script src="/scripts/authentication.js"></script>
+    <script src="/socket.io/socket.io.min.js"></script>
     <script>
     $(document).ready(function() {
+        GameSocket.connect();
         /* Get the canvas and 2D context */
         const cv = $("canvas").get(0);
         const context = cv.getContext("2d");
+        // let ready = false;
 
         const totalGameTime = 60;   // Total game time in seconds
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
@@ -134,14 +137,29 @@
         const player_blue = Player_blue(context, 30, 30, gameArea);
         let player;
         // console.log(Rooms);
-        const user = document.cookie;
-        console.log(user);
-        if (user == "player=1") {
-            player = player_red;
-        } else {
-            player = player_blue;
+        const cookies = document.cookie.split(";");
+        console.log(document.cookie);
+        const cookieElement = {};
+        for (var i = 0; i < cookies.length; i++) {
+            const parts = cookies[i].split("=");
+            let name = parts[0];
+            if (i != 0)
+                name = parts[0].split(" ")[1];
+            const content = parts[1];
+            cookieElement[name] = content;
+            console.log(name);
         }
-        const gem = Gem(context, 350, 350, "green");        // The gem
+        const user = cookieElement["player"];
+        const room = cookieElement["room"];
+        console.log(user);
+        if (user == "1") {
+            player = player_red;
+            GameSocket.listenPlayer(player_blue);
+        } else if (user == "2") {
+            player = player_blue;
+            GameSocket.listenPlayer(player_red);
+        }
+        let gem = Gem(context, 350, 350, "green");        // The gem
         const banana = Banana(context, 350, 350, "green"); 
         const bomb = Bomb(context, 350, 350, "green"); 
         const cell = 60;
@@ -235,25 +253,43 @@
             gem.update(now);
             banana.update(now);
             bomb.update(now);
-            player.update(now, boxes, boxes.length);
-            player.update(now, boxes, boxes.length);
+            player_blue.update(now, boxes, boxes.length);
+            player_red.update(now, boxes, boxes.length);
+
             
+            GameSocket.getSocket().on("move gem", (info) => {
+                console.log(room);
+                console.log(info.room);
+                if (room == info.room) {
+                    gem.setXY(info.x, info.y);
+                    console.log(room);
+                }
+            });
             /* TODO */
             /* Randomize the gem and collect the gem here */
-            if(gem.getAge(now) >= gemMaxAge){
-                gem.randomize(gameArea, boxes, boxes.length);
-            }
-            if(banana.getAge(now) >= gemMaxAge){
-                banana.randomize(gameArea, boxes, boxes.length);
-            }
-            if(bomb.getAge(now) >= gemMaxAge){
-                bomb.randomize(gameArea, boxes, boxes.length);
+            // console.log(gem.getAge(now));
+            // console.log(now);
+            if (user == "1") {
+                if(gem.getAge(now) >= gemMaxAge){
+                    const {x, y} = gem.randomize(gameArea, boxes, boxes.length);
+                    GameSocket.updateGem(room, x, y);
+                    // gem = GameSocket.listenGem(gem);
+                }
+                if(banana.getAge(now) >= gemMaxAge){
+                    banana.randomize(gameArea, boxes, boxes.length);
+                }
+                if(bomb.getAge(now) >= gemMaxAge){
+                    bomb.randomize(gameArea, boxes, boxes.length);
+                }
             }
     
             //player meet the items
             if(player.getBoundingBox().isPointInBox(gem.getXY()["x"],gem.getXY()["y"])){
                 collectedGems++;
-                gem.randomize(gameArea, boxes, boxes.length);
+                const {x, y} = gem.randomize(gameArea, boxes, boxes.length);
+                GameSocket.updateGem(room, x, y);
+                // GameSocket.updateGem(room, gem);
+                // gem = GameSocket.listenGem(gem);
             }
             if(player.getBoundingBox().isPointInBox(banana.getXY()["x"],banana.getXY()["y"])){
                 hp++;
@@ -261,17 +297,7 @@
             }
             if(player.getBoundingBox().isPointInBox(bomb.getXY()["x"],bomb.getXY()["y"])){
                 hp--;
-                bombTime = 30000 + gameTimeSoFar;
                 bomb.randomize(gameArea, boxes, boxes.length);
-            }
-            console.log("bombTime = "+bombTime);
-            console.log("gameTimeSoFar = "+gameTimeSoFar);
-            console.log("frozen = "+frozen);
-            if(gameTimeSoFar < bombTime){
-                frozen = 1;
-                player.stop(5);
-            }else{
-                frozen = 0;
             }
             /* Clear the screen */
             context.clearRect(0, 0, cv.width, cv.height);
@@ -289,9 +315,11 @@
             requestAnimationFrame(doFrame);
         }
 
-        /* Handle the start of the game */
         $("#game-start").on("click", function() {
-            // console.log("hahah");
+            GameSocket.ready(room);
+        });
+
+        GameSocket.getSocket().on("all ready", (room) => {
             /* Hide the start screen */
             $("#game-start").hide();
             gem.randomize(gameArea);
@@ -303,12 +331,17 @@
                 if(frozen == 0){
                 if(event.keyCode == 37||event.keyCode == 65){//go left
                     player.move(1);
+                    GameSocket.updatePlayer(room, 1, 0, user);
+                    // console.log("a");
                 }else if(event.keyCode == 38||event.keyCode == 87){//up
                     player.move(2);
+                    GameSocket.updatePlayer(room, 2, 0, user);
                 }else if(event.keyCode == 39||event.keyCode == 68){//right
                     player.move(3);
+                    GameSocket.updatePlayer(room, 3, 0, user);
                 }else if(event.keyCode == 40||event.keyCode == 83){//down
                     player.move(4);
+                    GameSocket.updatePlayer(room, 4, 0, user);
                 }       
                 if (event.keyCode == 32) {
                     player.speedUp();
@@ -322,12 +355,16 @@
                 if(frozen == 0){
                 if(event.keyCode == 37||event.keyCode == 65){//go left
                     player.stop(1);
+                    GameSocket.updatePlayer(room, 1, 1, user);
                 }else if(event.keyCode == 38||event.keyCode == 87){//up
                     player.stop(2);
+                    GameSocket.updatePlayer(room, 2, 1, user);
                 }else if(event.keyCode == 39||event.keyCode == 68){//right
                     player.stop(3);
+                    GameSocket.updatePlayer(room, 3, 1, user);
                 }else if(event.keyCode == 40||event.keyCode == 83){//down
                     player.stop(4);
+                    GameSocket.updatePlayer(room, 4, 1, user);
                 }     
                 if (event.keyCode == 32) {
                     player.slowDown();

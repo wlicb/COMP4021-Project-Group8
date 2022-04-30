@@ -282,10 +282,55 @@ io.on("connection", (socket) => {
 
     socket.on("start game", (room) => {
         // console.log(room);
+        const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
+        // const ready = 0;
+        const newRoom = { 
+            name: room.name, 
+            ready: 0, 
+            timeRemaining: 60,
+            user1Gem: 0,
+            user2Gem: 0,
+            user1HP: 3,
+            user2HP: 3
+            // gemLocationX: 0,
+            // gemLocationY: 0
+        }
+        roomStatus.push(newRoom);
+        fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
         io.emit("get into game", room);
-    })
-    
-})
+    });
+
+    socket.on("update player", (info) => {
+        io.emit("move player", info);
+    });
+
+    socket.on("ready", (room) => {
+        const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
+        console.log("123344565");
+        for (var r of roomStatus) {
+            if (r.name == room) {
+                r.ready++;
+            }
+            if (r.ready == 2) {
+                io.emit("all ready", room);
+                console.log("34224");
+            }
+        }
+        fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
+    });
+
+    socket.on("update gem", (info) => {
+        // const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
+        // for (var r of roomStatus) {
+        //     if (r.name == room) {
+        //         r.gemLocationX = info.x;
+        //         r.gemLocationY = info.y;
+        //     }
+        // }
+        // fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
+        io.emit("move gem", info);
+    });
+});
 
 // Use a web server to listen at port 8000
 httpServer.listen(8000, () => {
