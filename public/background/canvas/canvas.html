@@ -345,17 +345,17 @@
                 if(frozen == 0){
                     if(event.keyCode == 37||event.keyCode == 65){//go left
                         player.move(1);
-                        GameSocket.updatePlayer(room, 1, 0, user);
+                        GameSocket.updatePlayer(room, 1, 0, user, player.getXY());
                         // console.log("a");
                     }else if(event.keyCode == 38||event.keyCode == 87){//up
                         player.move(2);
-                        GameSocket.updatePlayer(room, 2, 0, user);
+                        GameSocket.updatePlayer(room, 2, 0, user, player.getXY());
                     }else if(event.keyCode == 39||event.keyCode == 68){//right
                         player.move(3);
-                        GameSocket.updatePlayer(room, 3, 0, user);
+                        GameSocket.updatePlayer(room, 3, 0, user, player.getXY());
                     }else if(event.keyCode == 40||event.keyCode == 83){//down
                         player.move(4);
-                        GameSocket.updatePlayer(room, 4, 0, user);
+                        GameSocket.updatePlayer(room, 4, 0, user, player.getXY());
                     }       
                     if (event.keyCode == 32) {
                         player.speedUp();
@@ -370,16 +370,16 @@
                 if(frozen == 0){
                     if(event.keyCode == 37||event.keyCode == 65){//go left
                         player.stop(1);
-                        GameSocket.updatePlayer(room, 1, 1, user);
+                        GameSocket.updatePlayer(room, 1, 1, user, player.getXY());
                     }else if(event.keyCode == 38||event.keyCode == 87){//up
                         player.stop(2);
-                        GameSocket.updatePlayer(room, 2, 1, user);
+                        GameSocket.updatePlayer(room, 2, 1, user, player.getXY());
                     }else if(event.keyCode == 39||event.keyCode == 68){//right
                         player.stop(3);
-                        GameSocket.updatePlayer(room, 3, 1, user);
+                        GameSocket.updatePlayer(room, 3, 1, user, player.getXY());
                     }else if(event.keyCode == 40||event.keyCode == 83){//down
                         player.stop(4);
-                        GameSocket.updatePlayer(room, 4, 1, user);
+                        GameSocket.updatePlayer(room, 4, 1, user, player.getXY());
                     }     
                     if (event.keyCode == 32) {
                         player.slowDown();

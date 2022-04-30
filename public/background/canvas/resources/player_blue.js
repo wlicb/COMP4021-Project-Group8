@@ -117,7 +117,7 @@ const Player_blue = function(ctx, x, y, gameArea) {
             }
         }
         return false;
-    }
+    };
 
     // The methods are returned as an object here.
     return {
@@ -127,6 +127,8 @@ const Player_blue = function(ctx, x, y, gameArea) {
         slowDown: slowDown,
         getBoundingBox: sprite.getBoundingBox,
         draw: sprite.draw,
-        update: update
+        update: update,
+        setXY: sprite.setXY,
+        getXY: sprite.getXY
     };
 };

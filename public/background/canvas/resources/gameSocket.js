@@ -30,16 +30,16 @@ const GameSocket = (function() {
         socket = null;
     };
 
-    const updatePlayer = function(room, direction, type, user) {
+    const updatePlayer = function(room, direction, type, user, XY) {
         // console.log("b");
-        const info = { room, direction, type, user };
+        const info = { room, direction, type, user, XY };
         socket.emit("update player", info);
     }
 
     const listenPlayer = function(player) {
         socket.on("move player", (info) =>{
             // console.log("c");
-            const { room, direction, type, user } = info;
+            const { room, direction, type, user, XY } = info;
             const cookies = document.cookie.split(";");
             // console.log(document.cookie);
             const cookieElement = {};
@@ -55,11 +55,21 @@ const GameSocket = (function() {
             const currentUser = cookieElement["player"];
             const currentRoom = cookieElement["room"];
             if ((room == currentRoom) && (user != currentUser)) {
-                console.log("d");
-                if (type == 0)
+            // if (room == currentRoom) {
+                // console.log("d");
+                if (type == 0) {
                     player.move(direction);
-                else
+                    player.setXY(XY.x, XY.y);
+                }
+                else {
                     player.stop(direction);
+                    player.setXY(XY.x, XY.y);
+                }
+
+                // console.log(XY);
+                // console.log(XY.x);
+                // console.log(XY.y);
+
                 // player.updateWithoutBoundary(now);
             }
         });
@@ -91,7 +101,7 @@ const GameSocket = (function() {
 
     const listenSpeedUp = function(player) {
         socket.on("speed up player", (info) =>{
-            console.log("alaalalala");
+            // console.log("alaalalala");
             // console.log("c");
             const { room, user, type } = info;
             const cookies = document.cookie.split(";");

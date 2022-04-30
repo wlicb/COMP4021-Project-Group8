@@ -319,7 +319,6 @@ io.on("connection", (socket) => {
                     console.log("34224");
                 }
             }
-            
         }
         fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
     });
@@ -337,7 +336,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("speed up", (info) => {
-        console.log("aafdsfdsffdsf");
+        // console.log("aafdsfdsffdsf");
         io.emit("speed up player", info);
     });
     socket.on("update banana", (info) => {
@@ -350,6 +349,6 @@ io.on("connection", (socket) => {
 
 // Use a web server to listen at port 8000
 httpServer.listen(8000, () => {
-    console.log("The chat server has started...");
+    console.log("The server has started...");
 });
 
