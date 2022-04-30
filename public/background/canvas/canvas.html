@@ -316,7 +316,7 @@
         }
 
         $("#game-start").on("click", function() {
-            GameSocket.ready(room);
+            GameSocket.ready(room, user);
         });
 
         GameSocket.getSocket().on("all ready", (room) => {

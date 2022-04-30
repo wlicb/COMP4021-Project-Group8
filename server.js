@@ -286,7 +286,8 @@ io.on("connection", (socket) => {
         // const ready = 0;
         const newRoom = { 
             name: room.name, 
-            ready: 0, 
+            ready1: 0, 
+            ready2: 0,
             timeRemaining: 60,
             user1Gem: 0,
             user2Gem: 0,
@@ -304,15 +305,18 @@ io.on("connection", (socket) => {
         io.emit("move player", info);
     });
 
-    socket.on("ready", (room) => {
+    socket.on("ready", (info) => {
         const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
         console.log("123344565");
         for (var r of roomStatus) {
-            if (r.name == room) {
-                r.ready++;
+            if (r.name == info.room) {
+                if (info.user == "1")
+                    r.ready1++;
+                else if (info.user == "2")
+                    r.ready2++;
             }
-            if (r.ready == 2) {
-                io.emit("all ready", room);
+            if ((r.ready1 >= 1) && (r.ready2 >= 1)) {
+                io.emit("all ready", info.room);
                 console.log("34224");
             }
         }

@@ -71,8 +71,9 @@ const GameSocket = (function() {
         socket.emit("update gem", info);
     }
 
-    const ready = function(room) {
-        socket.emit("ready", room);
+    const ready = function(room, user) {
+        const info = { room, user };
+        socket.emit("ready", info);
     };
 
     return { getSocket, connect, disconnect, updatePlayer, listenPlayer, updateGem, ready };
