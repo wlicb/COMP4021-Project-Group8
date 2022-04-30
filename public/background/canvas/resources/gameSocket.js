@@ -70,6 +70,14 @@ const GameSocket = (function() {
         const info = { room, x, y };
         socket.emit("update gem", info);
     }
+    const updateBanana = function(room, x, y) {
+        const info = { room, x, y };
+        socket.emit("update banana", info);
+    }
+    const updateBomb = function(room, x, y) {
+        const info = { room, x, y };
+        socket.emit("update bomb", info);
+    }
 
     const ready = function(room, user) {
         const info = { room, user };
@@ -111,6 +119,6 @@ const GameSocket = (function() {
         });
 
     };
+    return { getSocket, connect, disconnect, updatePlayer, listenPlayer, updateGem, updateBanana, updateBomb, ready, speedUp, listenSpeedUp };
 
-    return { getSocket, connect, disconnect, updatePlayer, listenPlayer, updateGem, ready, speedUp, listenSpeedUp };
 })();

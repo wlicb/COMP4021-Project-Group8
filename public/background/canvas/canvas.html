@@ -260,11 +260,19 @@
 
             
             GameSocket.getSocket().on("move gem", (info) => {
-                // console.log(room);
-                // console.log(info.room);
+
                 if (room == info.room) {
                     gem.setXY(info.x, info.y);
-                    // console.log(room);
+                }
+            });
+            GameSocket.getSocket().on("move banana", (info) => {
+                if (room == info.room) {
+                    banana.setXY(info.x, info.y);
+                }
+            });
+            GameSocket.getSocket().on("move bomb", (info) => {
+                if (room == info.room) {
+                    bomb.setXY(info.x, info.y);
                 }
             });
             /* TODO */
@@ -278,10 +286,12 @@
                     // gem = GameSocket.listenGem(gem);
                 }
                 if(banana.getAge(now) >= gemMaxAge){
-                    banana.randomize(gameArea, boxes, boxes.length);
+                    const {x, y} = banana.randomize(gameArea, boxes, boxes.length);
+                    GameSocket.updateBanana(room, x, y);
                 }
                 if(bomb.getAge(now) >= gemMaxAge){
-                    bomb.randomize(gameArea, boxes, boxes.length);
+                    const {x, y} = bomb.randomize(gameArea, boxes, boxes.length);
+                    GameSocket.updateBomb(room, x, y);
                 }
             }
     
@@ -295,11 +305,13 @@
             }
             if(player.getBoundingBox().isPointInBox(banana.getXY()["x"],banana.getXY()["y"])){
                 hp++;
-                banana.randomize(gameArea, boxes, boxes.length);
+                const {x, y} = banana.randomize(gameArea, boxes, boxes.length);
+                GameSocket.updateBanana(room, x, y);
             }
             if(player.getBoundingBox().isPointInBox(bomb.getXY()["x"],bomb.getXY()["y"])){
                 hp--;
-                bomb.randomize(gameArea, boxes, boxes.length);
+                const {x, y} = bomb.randomize(gameArea, boxes, boxes.length);
+                GameSocket.updateBomb(room, x, y);
             }
             /* Clear the screen */
             context.clearRect(0, 0, cv.width, cv.height);

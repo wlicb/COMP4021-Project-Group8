@@ -31,7 +31,6 @@ const Banana = function(ctx, x, y, color) {
     // `"green"`, `"red"`, `"yellow"` or `"purple"`
     const setColor = function(color) {
         sprite.setSequence(sequences[color]);
-        birthTime = performance.now();
     };
 
     // This function gets the age (in millisecond) of the gem.
@@ -59,15 +58,21 @@ const Banana = function(ctx, x, y, color) {
                     break;
                 }
             }
-            if (!overlap)
-                break;
+            if (!overlap) {
+                return {x ,y};
+                // break;
+            }
         }
     };
-
+    const setXY = function(xvalue, yvalue) {
+        birthTime = performance.now();
+        sprite.setXY(xvalue, yvalue);
+        return this;
+    }
     // The methods are returned as an object here.
     return {
         getXY: sprite.getXY,
-        setXY: sprite.setXY,
+        setXY: setXY,
         setColor: setColor,
         getAge: getAge,
         getBoundingBox: sprite.getBoundingBox,

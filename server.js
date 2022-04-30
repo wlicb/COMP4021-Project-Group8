@@ -314,11 +314,12 @@ io.on("connection", (socket) => {
                     r.ready1++;
                 else if (info.user == "2")
                     r.ready2++;
+                if ((r.ready1 >= 1) && (r.ready2 >= 1)) {
+                    io.emit("all ready", info.room);
+                    console.log("34224");
+                }
             }
-            if ((r.ready1 >= 1) && (r.ready2 >= 1)) {
-                io.emit("all ready", info.room);
-                console.log("34224");
-            }
+            
         }
         fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
     });
@@ -338,6 +339,12 @@ io.on("connection", (socket) => {
     socket.on("speed up", (info) => {
         console.log("aafdsfdsffdsf");
         io.emit("speed up player", info);
+    });
+    socket.on("update banana", (info) => {
+        io.emit("move banana", info);
+    });
+    socket.on("update bomb", (info) => {
+        io.emit("move bomb", info);
     });
 });
 
