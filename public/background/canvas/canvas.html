@@ -80,6 +80,15 @@
         const context = cv.getContext("2d");
         // let ready = false;
 
+        /* Create the sounds */
+        const sounds = {
+            background: new Audio("./resources/bgm.mp3"),
+            get_Gem: new Audio("./resources/get_Gem.mp3"),
+            get_Banana: new Audio("./resources/get_Banana.mp3"),
+            get_Bomb: new Audio("./resources/get_Bomb.mp3"),
+            gameover: new Audio("./resources/game_over.mp3")
+        };
+
         const totalGameTime = 60;   // Total game time in seconds
         const gemMaxAge = 6000;     // The maximum age of the gems in milliseconds
         let gameStartTime = 0;      // The timestamp when the game starts
@@ -469,6 +478,9 @@
                     }
                 }
                 $("#game-over").show();
+                sounds.background.pause();
+                sounds.gameover.play();
+
                 console.log(collectedGems);
                 console.log(collectedGemsOfOpponent);
                 console.log(hp);
@@ -479,12 +491,16 @@
             if (hp == 0) {
                 $("#game-over-text").html("You are dead! You lose!");
                 $("#game-over").show();
+                sounds.background.pause();
+                sounds.gameover.play();
                 return;
             }
 
             if (hpOfOpponent == 0) {
                 $("#game-over-text").html("The other guy is dead! You win!");
                 $("#game-over").show();
+                sounds.background.pause();
+                sounds.gameover.play();
                 return;
             }
 
@@ -535,6 +551,7 @@
             //player meet the items
             if(player.getBoundingBox().isPointInBox(gem.getXY()["x"],gem.getXY()["y"])){
                 collectedGems++;
+                sounds.get_Gem.play();
                 const {x, y} = gem.randomize(gameArea, boxes, boxes.length);
                 GameSocket.updateGem(room, x, y);
                 GameSocket.updateScore(user, 1, room);
@@ -543,12 +560,14 @@
             }
             if(player.getBoundingBox().isPointInBox(banana.getXY()["x"],banana.getXY()["y"])){
                 hp++;
+                sounds.get_Banana.play();
                 const {x, y} = banana.randomize(gameArea, boxes, boxes.length);
                 GameSocket.updateBanana(room, x, y);
                 GameSocket.updateHP(user, 1, room);
             }
             if(player.getBoundingBox().isPointInBox(bomb.getXY()["x"],bomb.getXY()["y"])){
                 hp--;
+                sounds.get_Bomb.play();
                 const {x, y} = bomb.randomize(gameArea, boxes, boxes.length);
                 GameSocket.updateBomb(room, x, y);
                 GameSocket.updateHP(user, -1, room);
@@ -581,6 +600,7 @@
         GameSocket.getSocket().on("all ready", (room) => {
             /* Hide the start screen */
             $("#game-start").hide();
+            sounds.background.play();
             /* Handle the keydown of arrow keys and spacebar */
             $(document).on("keydown", function(event) {
                 /* TODO */
