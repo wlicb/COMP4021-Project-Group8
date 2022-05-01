@@ -1,7 +1,7 @@
 const StartOverlay = (function() {
     const initialize = function() {
         // $("#start-overlay").show();
-        $("#go-into-game-button").on("click", () => {
+        $("#start-overlay").on("click", () => {
             hide();
             SignInForm.show();
         })
