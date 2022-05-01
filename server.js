@@ -307,7 +307,7 @@ io.on("connection", (socket) => {
 
     socket.on("ready", (info) => {
         const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
-        console.log("123344565");
+        // console.log("123344565");
         for (var r of roomStatus) {
             if (r.name == info.room) {
                 if (info.user == "1")
@@ -316,7 +316,7 @@ io.on("connection", (socket) => {
                     r.ready2++;
                 if ((r.ready1 >= 1) && (r.ready2 >= 1)) {
                     io.emit("all ready", info.room);
-                    console.log("34224");
+                    // console.log("34224");
                 }
             }
         }
@@ -344,6 +344,47 @@ io.on("connection", (socket) => {
     });
     socket.on("update bomb", (info) => {
         io.emit("move bomb", info);
+    });
+    socket.on("update score", (info) => {
+        const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
+        console.log("score is updating");
+        let value = 0;
+        for (var r of roomStatus) {
+            if (r.name == info.room) {
+                if (info.user == 1) {
+                    r.user1Gem += info.value;
+                    value = r.user1Gem;
+                }
+                else if (info.user == 2) {
+                    r.user2Gem += info.value;
+                    value = r.user2Gem;
+                }
+            }
+        }
+        fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
+        const res = { user: info.user, value: value, room: info.room };
+        io.emit("show score", res);
+    });
+
+    socket.on("update hp", (info) => {
+        const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
+        let value = 0;
+        console.log("hp is updating");
+        for (var r of roomStatus) {
+            if (r.name == info.room) {
+                if (info.user == 1) {
+                    r.user1HP += info.value;
+                    value = r.user1HP;
+                }
+                else if (info.user == 2) {
+                    r.user2HP += info.value;
+                    value = r.user2HP;
+                }
+            }
+        }
+        fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
+        const res = { user: info.user, value: value, room: info.room };
+        io.emit("show hp", res);
     });
 });
 

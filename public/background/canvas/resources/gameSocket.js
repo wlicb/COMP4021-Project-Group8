@@ -129,6 +129,20 @@ const GameSocket = (function() {
         });
 
     };
-    return { getSocket, connect, disconnect, updatePlayer, listenPlayer, updateGem, updateBanana, updateBomb, ready, speedUp, listenSpeedUp };
+
+    const updateScore = function(user, value, room) {
+        const info = { user, value, room };
+        socket.emit("update score", info);
+    };
+
+    const updateHP = function(user, value, room) {
+        const info = { user, value, room };
+        socket.emit("update hp", info);
+    };
+
+
+
+    return { getSocket, connect, disconnect, updatePlayer, listenPlayer, 
+        updateGem, updateBanana, updateBomb, ready, speedUp, listenSpeedUp, updateScore, updateHP };
 
 })();

@@ -127,6 +127,8 @@
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
         let gameStartTime = 0;      // The timestamp when the game starts
         let collectedGems = 0;      // The number of gems collected in the game
+        let collectedGemsOfOpponent = 0;
+        let hpOfOpponent = 3;
         let hp = 3;
         /* Create the game area */
         const gameArea = BoundingBox(context, 30, 30, 690, 690);
@@ -152,6 +154,24 @@
         const user = cookieElement["player"];
         const room = cookieElement["room"];
         console.log(user);
+
+        GameSocket.getSocket().on("show score", (res) => {
+            if ((res.room == room) && (res.user != user)) {
+                collectedGemsOfOpponent = res.value;
+                console.log("aaaa");
+                console.log(collectedGemsOfOpponent);
+            }
+        });
+        GameSocket.getSocket().on("show hp", (res) => {
+            if ((res.room == room) && (res.user != user)) {
+                hpOfOpponent = res.value;
+                console.log("bbbb");
+                console.log(hpOfOpponent);
+            }
+        });
+
+
+
         if (user == "1") {
             player = player_red;
             GameSocket.listenPlayer(player_blue);
@@ -248,6 +268,10 @@
                 //$("#final-gems").text(collectedGems);
                     $("#final-gems").text(collectedGems+" "+hp);
                 $("#game-over").show();
+                console.log(collectedGems);
+                console.log(collectedGemsOfOpponent);
+                console.log(hp);
+                console.log(hpOfOpponent);
                 return;
             }
 
@@ -300,6 +324,7 @@
                 collectedGems++;
                 const {x, y} = gem.randomize(gameArea, boxes, boxes.length);
                 GameSocket.updateGem(room, x, y);
+                GameSocket.updateScore(user, 1, room);
                 // GameSocket.updateGem(room, gem);
                 // gem = GameSocket.listenGem(gem);
             }
@@ -307,11 +332,13 @@
                 hp++;
                 const {x, y} = banana.randomize(gameArea, boxes, boxes.length);
                 GameSocket.updateBanana(room, x, y);
+                GameSocket.updateHP(user, 1, room);
             }
             if(player.getBoundingBox().isPointInBox(bomb.getXY()["x"],bomb.getXY()["y"])){
                 hp--;
                 const {x, y} = bomb.randomize(gameArea, boxes, boxes.length);
                 GameSocket.updateBomb(room, x, y);
+                GameSocket.updateHP(user, -1, room);
             }
             /* Clear the screen */
             context.clearRect(0, 0, cv.width, cv.height);
