@@ -38,7 +38,7 @@ const chatSession = session({
     resave: false,
     saveUninitialized: false,
     rolling: true,
-    cookie: { maxAge: 300000 }
+    // cookie: { maxAge: 3000000 }    // changed to 50 mins
 });
 app.use(chatSession);
 

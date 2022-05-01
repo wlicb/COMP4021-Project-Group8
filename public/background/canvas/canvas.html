@@ -157,9 +157,9 @@
             GameSocket.listenPlayer(player_red);
             GameSocket.listenSpeedUp(player_red);
         }
-        const gem = Gem(context, 260, 440, "green");        // The gem
-        const banana = Banana(context, 30, 690, "green"); 
-        const bomb = Bomb(context, 690, 30, "green"); 
+        let gem = Gem(context, 260, 440, "green");        // The gem
+        let banana = Banana(context, 30, 690, "green"); 
+        let bomb = Bomb(context, 690, 30, "green"); 
         let pool;
         let boxes = [];
         const cell = 60;
@@ -406,9 +406,9 @@
             collectedGemsOfOpponent = 0;
             hpOfOpponent = 3;
             hp = 3;
-            gem = Gem(context, 350, 350, "green");
-            banana = Banana(context, 350, 350, "green"); 
-            bomb = Bomb(context, 350, 350, "green"); 
+            gem = Gem(context, 260, 440, "green");        // The gem
+            banana = Banana(context, 30, 690, "green"); 
+            bomb = Bomb(context, 690, 30, "green"); 
             gameStartTime = 0;
         });
 
@@ -436,7 +436,10 @@
         });
 
         function doFrame(now) {
-            if (gameStartTime == 0) gameStartTime = now;
+            if (gameStartTime == 0) {
+                gameStartTime = now;
+                console.log(Math.ceil((totalGameTime * 1000 - now + gameStartTime) / 1000));    
+            }
 
             /* Update the time remaining */
             const gameTimeSoFar = now - gameStartTime;
