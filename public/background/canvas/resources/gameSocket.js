@@ -143,10 +143,14 @@ const GameSocket = (function() {
     const restartGame = function(room, user) {
         const info = { room, user };
         socket.emit("restart game", info);
-    }
+    };
+
+    const quitGame = function(room) {
+        socket.emit("quit game", room);
+    };
 
     return { getSocket, connect, disconnect, updatePlayer, listenPlayer, 
         updateGem, updateBanana, updateBomb, ready, speedUp, listenSpeedUp, updateScore, updateHP,
-        restartGame };
+        restartGame, quitGame };
 
 })();

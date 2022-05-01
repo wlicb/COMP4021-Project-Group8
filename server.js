@@ -50,7 +50,7 @@ function containWordCharsOnly(text) {
 // Handle the /register endpoint
 app.post("/register", (req, res) => {
     // Get the JSON data from the body
-    const { username, avatar, name, password } = req.body;
+    const { username, name, password } = req.body;
 
     //
     // D. Reading the users.json file
@@ -62,12 +62,6 @@ app.post("/register", (req, res) => {
     //
     if (username == "") {
         res.json({ error: "Please enter username"});
-        return;
-    } else if (avatar == "") {
-        res.json({ error: "Please enter avatar"});
-        return;
-    } else if (name == "") {
-        res.json({ error: "Please enter name"});
         return;
     } else if (password == "") {
         res.json({ error: "Please enter password"});
@@ -83,7 +77,7 @@ app.post("/register", (req, res) => {
     // G. Adding the new user account
     //
     const hash = bcrypt.hashSync(password, 10);
-    users[username] = { avatar : avatar, name : name, password : hash };
+    users[username] = { name : name, password : hash };
 
     //
     // H. Saving the users.json file
@@ -119,11 +113,10 @@ app.post("/signin", (req, res) => {
             res.json({ error: "Incorrect username/password."});
             return;
         } else {
-            const avatar = users[username].avatar;
             const name = users[username].name;
-            req.session.user = { username, avatar, name };
+            req.session.user = { username,  name };
             res.json({ status: "success",
-                        user: { username, avatar, name }});
+                        user: { username, name }});
             return;
         }
     } else {
@@ -144,9 +137,8 @@ app.get("/validate", (req, res) => {
     //
     if (currentUser) {
         const username = currentUser.username;
-        const avatar = currentUser.avatar;
         const name = currentUser.name;
-        res.json({status: "success", user: {username, avatar, name}});
+        res.json({status: "success", user: {username, name}});
         return;
     } else {
         res.json({status: "error", error: "session out"});
@@ -247,20 +239,6 @@ app.post("/joinRoom", (req, res) => {
 
 
 io.on("connection", (socket) => {
-    if (socket.request.session.user) {
-        onlineUsers[socket.request.session.user.username] = { avatar: socket.request.session.user.avatar, 
-        name: socket.request.session.user.name };
-        io.emit("add user", JSON.stringify({ username: socket.request.session.user.username, 
-            avatar: socket.request.session.user.avatar, name: socket.request.session.user.name }));
-    }
-    // console.log(onlineUsers);
-
-    socket.on("disconnect", () => {
-        delete onlineUsers[socket.request.session.user.username];
-        // console.log(onlineUsers);
-        io.emit("remove user", JSON.stringify({ username: socket.request.session.user.username, 
-            avatar: socket.request.session.user.avatar, name: socket.request.session.user.name }));
-    });
 
     socket.on("get users", () => {
         // Send the online users to the browser
@@ -412,6 +390,31 @@ io.on("connection", (socket) => {
         // const res = { room: room };
         // io.emit("back to start pane", res);
     });
+
+    socket.on("quit game", (room) => {
+        const rooms = JSON.parse(fs.readFileSync("./data/rooms.json", "utf-8"));
+        const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
+        for (var i = 0; i < rooms.length; i++) {
+            if (rooms[i].name == room) {
+                console.log(room);
+                rooms.splice(i, 1);
+                // console.log(rooms[i]);
+                // delete rooms[i];
+            }
+        }
+        for (var i = 0; i < roomStatus.length; i++) {
+            if (roomStatus[i].name == room) {
+                console.log(room);
+                roomStatus.splice(i, 1);
+                // console.log(roomStatus[i]);
+                // delete roomStatus[i];
+            }
+        }
+        fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
+        fs.writeFileSync("./data/rooms.json", JSON.stringify(rooms, null, " "));
+        console.log("leaving game");
+        io.emit("leave game", room);
+    })
 });
 
 // Use a web server to listen at port 8000

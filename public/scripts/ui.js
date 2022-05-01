@@ -21,8 +21,6 @@ const StartOverlay = (function() {
 const SignInForm = (function() {
     // This function initializes the UI
     const initialize = function() {
-        // Populate the avatar selection
-        Avatar.populate($("#register-avatar"));
         
         // Hide it
         $("#signin-overlay").hide();
@@ -56,8 +54,7 @@ const SignInForm = (function() {
 
             // Get the input fields
             const username = $("#register-username").val().trim();
-            const avatar   = $("#register-avatar").val();
-            const name     = $("#register-name").val().trim();
+            const name     = username;
             const password = $("#register-password").val().trim();
             const confirmPassword = $("#register-confirm").val().trim();
 
@@ -68,7 +65,7 @@ const SignInForm = (function() {
             }
 
             // Send a register request
-            Registration.register(username, avatar, name, password,
+            Registration.register(username, name, password,
                 () => {
                     $("#register-form").get(0).reset();
                     $("#register-message").text("You can sign in now.");
@@ -150,7 +147,7 @@ const NewRoomPanel = (function() {
                 },
                 (error) => {
                     $("#new-room-message").text(error);
-                }, 
+                },
                 () => {
                     $("#new-room-message").text("You are already in another room!");
                 });
@@ -228,7 +225,7 @@ const RoomPanel = (function() {
                     $("#new-room-message").text(error);
                 },
                 () => {
-                    $("#new-room-message").text("You are already in another room!");
+                    $("#new-room-message").text("You are already in a room!");
                 });
         });
     };

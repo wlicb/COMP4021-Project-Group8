@@ -412,6 +412,11 @@
             gameStartTime = 0;
         });
 
+        $("#go-back-button").on("click", () => {
+            GameSocket.quitGame(room);
+        });
+        
+
         GameSocket.getSocket().on("hide player 1 ready", (targetRoom) => {
             if (room == targetRoom) {
                 $("#player1").hide();
@@ -421,6 +426,12 @@
         GameSocket.getSocket().on("hide player 2 ready", (targetRoom) => {
             if (room == targetRoom) {
                 $("#player2").hide();
+            }
+        });
+
+        GameSocket.getSocket().on("leave game", (targetRoom) => {
+            if (room == targetRoom) {
+                document.location.href = "/";
             }
         });
 
