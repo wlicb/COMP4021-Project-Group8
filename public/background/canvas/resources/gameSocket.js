@@ -140,9 +140,13 @@ const GameSocket = (function() {
         socket.emit("update hp", info);
     };
 
-
+    const restartGame = function(room, user) {
+        const info = { room, user };
+        socket.emit("restart game", info);
+    }
 
     return { getSocket, connect, disconnect, updatePlayer, listenPlayer, 
-        updateGem, updateBanana, updateBomb, ready, speedUp, listenSpeedUp, updateScore, updateHP };
+        updateGem, updateBanana, updateBomb, ready, speedUp, listenSpeedUp, updateScore, updateHP,
+        restartGame };
 
 })();

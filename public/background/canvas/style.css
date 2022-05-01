@@ -110,4 +110,9 @@ canvas {
     margin-bottom: 5%;
     width: 20%;
     border: 1px solid black;
+    transition: 0.5s background;
+    cursor: pointer;
+}
+button:hover {
+    background: #E4D1B9;
 }

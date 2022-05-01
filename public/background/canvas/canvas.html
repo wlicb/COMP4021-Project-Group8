@@ -47,9 +47,9 @@
             <div id="game-over" style="display: none">
                 <div id="game-over-text" class="game-over-content">
                 </div>
-                <button id="restart-text" class="game-over-button">Restart
+                <button id="restart-button" class="game-over-button">Restart
                 </button>
-                <button id="go-back-text" class="game-over-button">Leave
+                <button id="go-back-button" class="game-over-button">Leave
                 </button>
             </div>
         </div>
@@ -83,7 +83,7 @@
         const totalGameTime = 60;   // Total game time in seconds
         const gemMaxAge = 6000;     // The maximum age of the gems in milliseconds
         let gameStartTime = 0;      // The timestamp when the game starts
-        let collectedGems = 0;      // The number of gems collected in the game
+        let collectedGems = 0;
         let collectedGemsOfOpponent = 0;
         let hpOfOpponent = 3;
         let hp = 3;
@@ -397,6 +397,33 @@
         /* The main processing of the game */
         let bombTime = 0;
         let frozen = 0;
+
+        $("#restart-button").on("click", () => {
+            GameSocket.restartGame(room, user);
+            $("#game-over").fadeOut();
+            $("#game-start").fadeIn();
+            collectedGems = 0;
+            collectedGemsOfOpponent = 0;
+            hpOfOpponent = 3;
+            hp = 3;
+            gem = Gem(context, 350, 350, "green");
+            banana = Banana(context, 350, 350, "green"); 
+            bomb = Bomb(context, 350, 350, "green"); 
+            gameStartTime = 0;
+        });
+
+        GameSocket.getSocket().on("hide player 1 ready", (targetRoom) => {
+            if (room == targetRoom) {
+                $("#player1").hide();
+            }
+        });
+        
+        GameSocket.getSocket().on("hide player 2 ready", (targetRoom) => {
+            if (room == targetRoom) {
+                $("#player2").hide();
+            }
+        });
+
         function doFrame(now) {
             if (gameStartTime == 0) gameStartTime = now;
 
