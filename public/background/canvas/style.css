@@ -1,0 +1,89 @@
+body {
+    font-family: "Josefin Sans", sans-serif;
+    /* background: linear-gradient(white, #BE8C63); */
+    background: #BE8C63;
+}
+
+canvas, #counter, #game-start, #game-over {
+    position: absolute;
+    top: 0px;
+    left: 300px;
+
+}
+canvas, #game-start, #game-over {
+    border: 1px solid gray;
+    width: 700px;
+    height: 700px;
+}
+canvas {
+    background: url("./resources/background.jpg");
+    background-size: cover;
+    background-position: center;
+    /* margin: auto; */
+    /* align-items: center; */
+    /* margin-top:3%; */
+    /* margin-right: 15%; */
+    /* margin-left: 15%; */
+    
+}
+#game-start, #game-over {
+    background: rgba(1, 1, 1, 0.8);
+}
+#counter text {
+    font-size: 200%;
+    fill: white;
+    stroke: black;
+    stroke-width: 1px;
+}
+#game-start text {
+    font-size: 150%;
+    fill: white;
+    text-anchor: middle;
+}
+#game-start #game-title {
+    font-size: 400%;
+
+    /* fill: url(#title-fill); */
+    stroke: black;
+}
+#game-over text {
+    font-size: 120%;
+    fill: url(#game-over-fill);
+    text-anchor: middle;
+}
+#two-player {
+    position: absolute;
+    top:0;
+    left:0;
+    float: left;
+    flex-grow: 1;
+    align-items: center;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: block;
+}
+#game-container {
+    display: block;
+    position: absolute;
+    width: auto;
+    top: 0px;
+    left: 0px;
+    /* margin-right: 15%;
+    margin-left: 15%; */
+}
+#player1{
+    background-color: aqua ;
+    
+}
+#player2{
+    background-color: red ;
+}
+.row, .col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+}
+.col { flex-direction: column; }

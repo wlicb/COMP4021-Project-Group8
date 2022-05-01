@@ -3,105 +3,64 @@
 <head>
     <title>Pop Battle!</title>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap" rel="stylesheet">
-    <style>
-    body {
-        font-family: "Josefin Sans", sans-serif;
-        /* background: linear-gradient(white, #BE8C63); */
-        background: #BE8C63;
-    }
-    #game-container {
-        position: relative;
-        width: auto;
-        margin-right: 15%;
-        margin-left: 15%;
-    }
-    canvas, #counter, #game-start, #game-over {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-    }
-    canvas, #game-start, #game-over {
-        border: 1px solid gray;
-        width: 700px;
-        height: 700px;
-    }
-    canvas {
-        background: url("./resources/background.jpg");
-        background-size: cover;
-        background-position: center;
-        margin: auto;
-        align-items: center;
-        /* margin-top:3%; */
-        /* margin-right: 15%; */
-        /* margin-left: 15%; */
-       
-    }
-    #game-start, #game-over {
-        background: rgba(1, 1, 1, 0.8);
-    }
-    #counter text {
-        font-size: 200%;
-        fill: white;
-        stroke: black;
-        stroke-width: 1px;
-    }
-    #game-start text {
-        font-size: 150%;
-        fill: white;
-        text-anchor: middle;
-    }
-    #game-start #game-title {
-        font-size: 400%;
-
-        /* fill: url(#title-fill); */
-        stroke: black;
-    }
-    #game-over text {
-        font-size: 120%;
-        fill: url(#game-over-fill);
-        text-anchor: middle;
-    }
-    </style>
+    <link href="style.css" rel="stylesheet">
 </head>
 <body>
-    <div id="game-container">
-        <canvas width="720px" height="720px"></canvas>
+    <div id="container" class="row">
+        <div id="two-player" class="col">
+            
+            <div id="player1" >
+                <div id="score1-panel"  class="row">
+                    <div id="user1" class="row">user1 </div>
+                    <div id="score1" class="row">score:<br>0</div>
+                    <div id="hp1" class="row">hp: <br>3</div>
+                </div>
+            </div>
+            <div id="player2">
+                <div id="score2-panel" class="row">
+                    <div id="user2" class="row"> user2</div>
+                    <div id="score2" class="row">000</div>
+                    <div id="hp2" class="row">hp</div>
+                </div>
+            </div>
+        </div>
 
-        <svg xmlns="http://www.w3.org/2000/svg" id="counter">
-            <text x="10" y="35">
-                TIME:<tspan id="time-remaining">20</tspan>
-            </text>
-        </svg>
-
-        <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
-            <defs>
-                <linearGradient id="title-fill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0.2" stop-color="red" />
-                    <stop offset="0.4" stop-color="yellow" />
-                    <stop offset="0.6" stop-color="green" />
-                    <stop offset="0.8" stop-color="purple" />
-                </linearGradient>
-            </defs>
-            <text id="game-title" x="50%" y="45%">POP BATTLE!</text>
-            <text x="50%" y="60%">Click here to start the game</text>
-        </svg>
-
-        <svg xmlns="http://www.w3.org/2000/svg" id="game-over" style="display: none">
-            <defs>
-                <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stop-color="red" />
-                    <stop offset="0.5" stop-color="yellow" />
-                    <stop offset="1" stop-color="red" />
-                </linearGradient>
-            </defs>
-            <text x="50%" y="50%">
-                Time's up! You have collected
-                <tspan id="final-gems">0</tspan>
-                gem(s).
-            </text>
-        </svg>
+        <div id="game-container" class="col">
+            <canvas width="720px" height="720px"></canvas>
+            <svg xmlns="http://www.w3.org/2000/svg" id="counter">
+                <text x="10" y="35">
+                    TIME:<tspan id="time-remaining">20</tspan>
+                </text>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
+                <defs>
+                    <linearGradient id="title-fill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0.2" stop-color="red" />
+                        <stop offset="0.4" stop-color="yellow" />
+                        <stop offset="0.6" stop-color="green" />
+                        <stop offset="0.8" stop-color="purple" />
+                    </linearGradient>
+                </defs>
+                <text id="game-title" x="50%" y="45%">POP BATTLE!</text>
+                <text x="50%" y="60%">Click here to start the game</text>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" id="game-over" style="display: none">
+                <defs>
+                    <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="red" />
+                        <stop offset="0.5" stop-color="yellow" />
+                        <stop offset="1" stop-color="red" />
+                    </linearGradient>
+                </defs>
+                <text x="50%" y="50%">
+                    Time's up! You have collected
+                    <tspan id="final-gems">0</tspan>
+                    gem(s).
+                </text>
+            </svg>
+        </div>
+            
     </div>
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="./resources/bounding_box.js"></script>
     <script src="./resources/sprite.js"></script>
@@ -123,7 +82,7 @@
         const context = cv.getContext("2d");
         // let ready = false;
 
-        const totalGameTime = 60;   // Total game time in seconds
+        const totalGameTime = 10;   // Total game time in seconds
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
         let gameStartTime = 0;      // The timestamp when the game starts
         let collectedGems = 0;      // The number of gems collected in the game
