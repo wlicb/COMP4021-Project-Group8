@@ -11,16 +11,16 @@
             
             <div id="player1" style="display: none;">
                 <div id="score1-panel"  class="row">
-                    <div id="user1" class="row">player 1:<br>-</div>
-                    <div id="score1" class="row">score:<br>0</div>
-                    <div id="hp1" class="row">hp:<br>3</div>
+                    <div id="user1" class="row">PLAYER 1:<br>-</div>
+                    <div id="score1" class="row">SCORE:<br>0</div>
+                    <div id="hp1" class="row">HP:<br>3</div>
                 </div>
             </div>
             <div id="player2" style="display: none;">
                 <div id="score2-panel" class="row">
-                    <div id="user2" class="row">player 2:<br>-</div>
-                    <div id="score2" class="row">score:<br>0</div>
-                    <div id="hp2" class="row">hp:<br>3</div>
+                    <div id="user2" class="row">PLAYER 2:<br>-</div>
+                    <div id="score2" class="row">SCORE:<br>0</div>
+                    <div id="hp2" class="row">HP:<br>3</div>
                 </div>
             </div>
         </div>
@@ -116,20 +116,18 @@
         console.log(map);
         console.log(user);
 
-        $("#user1").html("player 1:<br>" + player1 + "");
-        $("#user2").html("player 2:<br>" + player2 + "");
+        $("#user1").html("PLAYER 1:<br>" + player1 + "");
+        $("#user2").html("PLAYER 2:<br>" + player2 + "");
 
         GameSocket.getSocket().on("player 1 ready", (info) => {
             if (info == room) {
                 $("#player1").show();
-                console.log("1 is shown");
             }
         });
 
         GameSocket.getSocket().on("player 2 ready", (info) => {
             if (info == room) {
                 $("#player2").show();
-                console.log("2 is shown");
             }
         });
 
@@ -242,21 +240,7 @@
                 Box_desert(context, x_0 + cell*5, y_0 + cell*6),
                 Box_desert(context, x_0 + cell*6, y_0 + cell*5),
                 Box_desert(context, x_0 + cell*6, y_0 + cell*6),
-                //surround the pool
-                // Box_desert(context, x_0 + cell*4, y_0 + cell*4),
-                // Box_desert(context, x_0 + cell*4, y_0 + cell*5),
-                // Box_desert(context, x_0 + cell*4, y_0 + cell*6),
-                // Box_desert(context, x_0 + cell*4, y_0 + cell*7),
-                // Box_desert(context, x_0 + cell*7, y_0 + cell*4),
-                // Box_desert(context, x_0 + cell*7, y_0 + cell*5),
-                // Box_desert(context, x_0 + cell*7, y_0 + cell*6),
-                // Box_desert(context, x_0 + cell*7, y_0 + cell*7),
-                // Box_desert(context, x_0 + cell*5, y_0 + cell*4),
-                // Box_desert(context, x_0 + cell*6, y_0 + cell*4),
-                // Box_desert(context, x_0 + cell*5, y_0 + cell*7),
-                // Box_desert(context, x_0 + cell*6, y_0 + cell*7),
-
-
+            
                 Box_desert(context, x_0 + cell*1, y_0 + cell*1),
                 Box_desert(context, x_0 + cell*1, y_0 + cell*2),
                 Box_desert(context, x_0 + cell*2, y_0 + cell*1),
@@ -265,19 +249,13 @@
 
                 Box_desert(context, x_0 + cell*2, y_0 + cell*5),
                 Box_desert(context, x_0 + cell*3, y_0 + cell*5),
-                // Box_desert(context, x_0 + cell*4, y_0 + cell*5),
-
-                
 
                 Box_desert(context, x_0 + cell*7, y_0 + cell*5),
                 Box_desert(context, x_0 + cell*8, y_0 + cell*5),
 
-
                 Box_desert(context, x_0 + cell*1, y_0 + cell*7),
                 Box_desert(context, x_0 + cell*2, y_0 + cell*7),
                 Box_desert(context, x_0 + cell*3, y_0 + cell*7),
-                // Box_desert(context, x_0 + cell*4, y_0 + cell*7),
-                // Box_desert(context, x_0 + cell*6, y_0 + cell*7),
 
                 Box_desert(context, x_0 + cell*1, y_0 + cell*8),
                 Box_desert(context, x_0 + cell*6, y_0 + cell*8),
@@ -353,7 +331,7 @@
                 // Box_grass(context, x_0 + cell*6, y_0 + cell*7),
 
                 Box_grass(context, x_0 + cell*1, y_0 + cell*8),
-                Box_grass(context, x_0 + cell*6, y_0 + cell*8),
+                // Box_grass(context, x_0 + cell*6, y_0 + cell*8),
                 Box_grass(context, x_0 + cell*8, y_0 + cell*8),
                 Box_grass(context, x_0 + cell*9, y_0 + cell*8),
                 Box_grass(context, x_0 + cell*10, y_0 + cell*8),
@@ -450,16 +428,18 @@
 
 
             if (user == "1") {
-                $("#score1").html("score:<br>" + collectedGems + "");
-                $("#score2").html("score:<br>" + collectedGemsOfOpponent + "");
-                $("#hp1").html("hp:<br>" + hp + "");
-                $("#hp2").html("hp:<br>" + hpOfOpponent + "");
+                $("#user1").html("PLAYER 1:<br>" + player1 + "<br> ***Red is you***");
+                $("#score1").html("SCORE:<br>" + collectedGems + "");
+                $("#score2").html("SCORE:<br>" + collectedGemsOfOpponent + "");
+                $("#hp1").html("HP:<br>" + hp + "");
+                $("#hp2").html("HP:<br>" + hpOfOpponent + "");
             }
             else if (user == "2") {
-                $("#score1").html("score:<br>" + collectedGemsOfOpponent + "");
-                $("#score2").html("score:<br>" + collectedGems + "");
-                $("#hp1").html("hp:<br>" + hpOfOpponent + "");
-                $("#hp2").html("hp:<br>" + hp + "");
+                $("#user2").html("PLAYER 2:<br>" + player2 + "<br> **Blue is you**");
+                $("#score1").html("SCORE:<br>" + collectedGemsOfOpponent + "");
+                $("#score2").html("SCORE:<br>" + collectedGems + "");
+                $("#hp1").html("HP:<br>" + hpOfOpponent + "");
+                $("#hp2").html("HP:<br>" + hp + "");
             }
 
             /* TODO */

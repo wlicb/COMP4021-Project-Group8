@@ -7,7 +7,7 @@ body {
 canvas, #counter, #game-start, #game-over {
     position: absolute;
     top: 0px;
-    left: 300px;
+    left: 350px;
 
 }
 canvas, #game-start, #game-over {
