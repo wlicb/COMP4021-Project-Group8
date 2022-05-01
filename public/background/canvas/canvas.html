@@ -9,18 +9,18 @@
     <div id="container" class="row">
         <div id="two-player" class="col">
             
-            <div id="player1" >
+            <div id="player1" style="display: none;">
                 <div id="score1-panel"  class="row">
-                    <div id="user1" class="row">user1 </div>
+                    <div id="user1" class="row">player 1:<br>-</div>
                     <div id="score1" class="row">score:<br>0</div>
-                    <div id="hp1" class="row">hp: <br>3</div>
+                    <div id="hp1" class="row">hp:<br>3</div>
                 </div>
             </div>
-            <div id="player2">
+            <div id="player2" style="display: none;">
                 <div id="score2-panel" class="row">
-                    <div id="user2" class="row"> user2</div>
-                    <div id="score2" class="row">000</div>
-                    <div id="hp2" class="row">hp</div>
+                    <div id="user2" class="row">player 2:<br>-</div>
+                    <div id="score2" class="row">score:<br>0</div>
+                    <div id="hp2" class="row">hp:<br>3</div>
                 </div>
             </div>
         </div>
@@ -29,7 +29,7 @@
             <canvas width="720px" height="720px"></canvas>
             <svg xmlns="http://www.w3.org/2000/svg" id="counter">
                 <text x="10" y="35">
-                    TIME:<tspan id="time-remaining">20</tspan>
+                    TIME:<tspan id="time-remaining">60</tspan>
                 </text>
             </svg>
             <svg xmlns="http://www.w3.org/2000/svg" id="game-start">
@@ -44,20 +44,14 @@
                 <text id="game-title" x="50%" y="45%">POP BATTLE!</text>
                 <text x="50%" y="60%">Click here to start the game</text>
             </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" id="game-over" style="display: none">
-                <defs>
-                    <linearGradient id="game-over-fill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0" stop-color="red" />
-                        <stop offset="0.5" stop-color="yellow" />
-                        <stop offset="1" stop-color="red" />
-                    </linearGradient>
-                </defs>
-                <text x="50%" y="50%">
-                    Time's up! You have collected
-                    <tspan id="final-gems">0</tspan>
-                    gem(s).
-                </text>
-            </svg>
+            <div id="game-over" style="display: none">
+                <div id="game-over-text" class="game-over-content">
+                </div>
+                <button id="restart-text" class="game-over-button">Restart
+                </button>
+                <button id="go-back-text" class="game-over-button">Leave
+                </button>
+            </div>
         </div>
             
     </div>
@@ -82,8 +76,8 @@
         const context = cv.getContext("2d");
         // let ready = false;
 
-        const totalGameTime = 10;   // Total game time in seconds
-        const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
+        const totalGameTime = 60;   // Total game time in seconds
+        const gemMaxAge = 6000;     // The maximum age of the gems in milliseconds
         let gameStartTime = 0;      // The timestamp when the game starts
         let collectedGems = 0;      // The number of gems collected in the game
         let collectedGemsOfOpponent = 0;
@@ -112,7 +106,27 @@
         }
         const user = cookieElement["player"];
         const room = cookieElement["room"];
+        const player1 = cookieElement["name1"];
+        const player2 = cookieElement["name2"];
+        const map = cookieElement["map"];
         console.log(user);
+
+        $("#user1").html("player 1:<br>" + player1 + "");
+        $("#user2").html("player 2:<br>" + player2 + "");
+
+        GameSocket.getSocket().on("player 1 ready", (info) => {
+            if (info == room) {
+                $("#player1").show();
+                console.log("1 is shown");
+            }
+        });
+
+        GameSocket.getSocket().on("player 2 ready", (info) => {
+            if (info == room) {
+                $("#player2").show();
+                console.log("2 is shown");
+            }
+        });
 
         GameSocket.getSocket().on("show score", (res) => {
             if ((res.room == room) && (res.user != user)) {
@@ -140,7 +154,7 @@
             GameSocket.listenPlayer(player_red);
             GameSocket.listenSpeedUp(player_red);
         }
-        let gem = Gem(context, 350, 350, "green");        // The gem
+        const gem = Gem(context, 350, 350, "green");        // The gem
         const banana = Banana(context, 350, 350, "green"); 
         const bomb = Bomb(context, 350, 350, "green"); 
         const cell = 60;
@@ -221,16 +235,63 @@
             $("#time-remaining").text(timeRemaining);
 
 
+
+            if (user == "1") {
+                $("#score1").html("score:<br>" + collectedGems + "");
+                $("#score2").html("score:<br>" + collectedGemsOfOpponent + "");
+                $("#hp1").html("hp:<br>" + hp + "");
+                $("#hp2").html("hp:<br>" + hpOfOpponent + "");
+            }
+            else if (user == "2") {
+                $("#score1").html("score:<br>" + collectedGemsOfOpponent + "");
+                $("#score2").html("score:<br>" + collectedGems + "");
+                $("#hp1").html("hp:<br>" + hpOfOpponent + "");
+                $("#hp2").html("hp:<br>" + hp + "");
+            }
+
             /* TODO */
             /* Handle the game over situation here */
             if(timeRemaining == 0){
                 //$("#final-gems").text(collectedGems);
-                    $("#final-gems").text(collectedGems+" "+hp);
+                if (collectedGems > collectedGemsOfOpponent) {
+                    if (user == "1") {
+                        $("#game-over-text").html("Time is up! You win!<br>Ranking:<br> No.1  " + player1 + "                    Collected " 
+                        + collectedGems + " Gems<br>No.2  " + player2 + "                    Collected " + collectedGemsOfOpponent + " Gems");
+                    } else {
+                        $("#game-over-text").html("Time is up! You win!<br>Ranking:<br> No.1  " + player2 + "                    Collected " 
+                        + collectedGems + " Gems<br>No.2  " + player1 + "                    Collected " + collectedGemsOfOpponent + " Gems");
+                    }
+                }
+                else if (collectedGems == collectedGemsOfOpponent) {
+                    $("#game-over-text").html("Time is up! Both of you have collected " + collectedGems +
+                     " Gems!");
+                }
+                else {
+                    if (user == "1") {
+                        $("#game-over-text").html("Time is up! You lose!<br>Ranking:<br> No.1  " + player2 + "                    Collected " 
+                        + collectedGemsOfOpponent + " Gems<br>No.2  " + player1 + "                    Collected " + collectedGems + " Gems");
+                    } else {
+                        $("#game-over-text").html("Time is up! You lose!<br>Ranking:<br> No.1  " + player1 + "                    Collected " 
+                        + collectedGemsOfOpponent + " Gems<br>No.2  " + player2 + "                    Collected " + collectedGems + " Gems");
+                    }
+                }
                 $("#game-over").show();
                 console.log(collectedGems);
                 console.log(collectedGemsOfOpponent);
                 console.log(hp);
                 console.log(hpOfOpponent);
+                return;
+            }
+
+            if (hp == 0) {
+                $("#game-over-text").html("You are dead! You lose!");
+                $("#game-over").show();
+                return;
+            }
+
+            if (hpOfOpponent == 0) {
+                $("#game-over-text").html("The other guy is dead! You win!");
+                $("#game-over").show();
                 return;
             }
 
@@ -322,7 +383,6 @@
         GameSocket.getSocket().on("all ready", (room) => {
             /* Hide the start screen */
             $("#game-start").hide();
-            gem.randomize(gameArea);
             /* Handle the keydown of arrow keys and spacebar */
             $(document).on("keydown", function(event) {
                 /* TODO */

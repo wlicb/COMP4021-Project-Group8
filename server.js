@@ -310,10 +310,14 @@ io.on("connection", (socket) => {
         // console.log("123344565");
         for (var r of roomStatus) {
             if (r.name == info.room) {
-                if (info.user == "1")
+                if (info.user == "1") {
                     r.ready1++;
-                else if (info.user == "2")
+                    io.emit("player 1 ready", info.room);
+                }
+                else if (info.user == "2") {
                     r.ready2++;
+                    io.emit("player 2 ready", info.room);
+                }
                 if ((r.ready1 >= 1) && (r.ready2 >= 1)) {
                     io.emit("all ready", info.room);
                     // console.log("34224");
