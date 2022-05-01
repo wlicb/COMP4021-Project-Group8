@@ -26,7 +26,7 @@
         </div>
 
         <div id="game-container" class="col">
-            <canvas width="720px" height="720px"></canvas>
+            <canvas id="map-canvas" width="720px" height="720px"></canvas>
             <svg xmlns="http://www.w3.org/2000/svg" id="counter">
                 <text x="10" y="35">
                     TIME:<tspan id="time-remaining">60</tspan>
@@ -68,6 +68,10 @@
     <script src="./resources/gameSocket.js"></script>
     <script src="/scripts/authentication.js"></script>
     <script src="/socket.io/socket.io.min.js"></script>
+    <script src="./resources/ice_pool.js"></script>
+    <script src="./resources/box_grass.js"></script>
+    <script src="./resources/desert_pool.js"></script>
+    <script src="./resources/box_desert.js"></script>
     <script>
     $(document).ready(function() {
         GameSocket.connect();
@@ -109,6 +113,7 @@
         const player1 = cookieElement["name1"];
         const player2 = cookieElement["name2"];
         const map = cookieElement["map"];
+        console.log(map);
         console.log(user);
 
         $("#user1").html("player 1:<br>" + player1 + "");
@@ -143,8 +148,6 @@
             }
         });
 
-
-
         if (user == "1") {
             player = player_red;
             GameSocket.listenPlayer(player_blue);
@@ -154,74 +157,243 @@
             GameSocket.listenPlayer(player_red);
             GameSocket.listenSpeedUp(player_red);
         }
-        const gem = Gem(context, 350, 350, "green");        // The gem
-        const banana = Banana(context, 350, 350, "green"); 
-        const bomb = Bomb(context, 350, 350, "green"); 
+        const gem = Gem(context, 260, 440, "green");        // The gem
+        const banana = Banana(context, 30, 690, "green"); 
+        const bomb = Bomb(context, 690, 30, "green"); 
+        let pool;
+        let boxes = [];
         const cell = 60;
         const x_0 = gameArea.getLeft();
         const y_0 = gameArea.getTop();
-        const boxes = [
-            Box(context, x_0 + cell*1, y_0 + cell*1),
-            Box(context, x_0 + cell*1, y_0 + cell*2),
-            Box(context, x_0 + cell*2, y_0 + cell*1),
-            Box(context, x_0 + cell*2, y_0 + cell*3),
-            Box(context, x_0 + cell*2, y_0 + cell*4),
+    
+        if(map == "Sea"){
+            var imageUrl = "./resources/background.jpg";
+            $("#map-canvas").css("background-image", "url(" + imageUrl + ")");
+            // pool = Ice_pool(context, gameArea.getLeft()-30 + cell*6, gameArea.getTop()-30 + cell*6); 
+            boxes = [
+                Box(context, x_0 + cell*1, y_0 + cell*1),
+                Box(context, x_0 + cell*1, y_0 + cell*2),
+                Box(context, x_0 + cell*2, y_0 + cell*1),
+                Box(context, x_0 + cell*2, y_0 + cell*3),
+                Box(context, x_0 + cell*2, y_0 + cell*4),
 
-            Box(context, x_0 + cell*2, y_0 + cell*5),
-            Box(context, x_0 + cell*3, y_0 + cell*5),
-            // Box(context, x_0 + cell*4, y_0 + cell*5),
-            Box(context, x_0 + cell*6, y_0 + cell*5),
-            Box(context, x_0 + cell*7, y_0 + cell*5),
-            Box(context, x_0 + cell*8, y_0 + cell*5),
+                Box(context, x_0 + cell*2, y_0 + cell*5),
+                Box(context, x_0 + cell*3, y_0 + cell*5),
+                // Box(context, x_0 + cell*4, y_0 + cell*5),
+                Box(context, x_0 + cell*6, y_0 + cell*5),
+                Box(context, x_0 + cell*7, y_0 + cell*5),
+                Box(context, x_0 + cell*8, y_0 + cell*5),
 
-            Box(context, x_0 + cell*6, y_0 + cell*6),
+                Box(context, x_0 + cell*6, y_0 + cell*6),
 
-            Box(context, x_0 + cell*1, y_0 + cell*7),
-            Box(context, x_0 + cell*2, y_0 + cell*7),
-            Box(context, x_0 + cell*3, y_0 + cell*7),
-            Box(context, x_0 + cell*4, y_0 + cell*7),
-            Box(context, x_0 + cell*6, y_0 + cell*7),
+                Box(context, x_0 + cell*1, y_0 + cell*7),
+                Box(context, x_0 + cell*2, y_0 + cell*7),
+                Box(context, x_0 + cell*3, y_0 + cell*7),
+                Box(context, x_0 + cell*4, y_0 + cell*7),
+                Box(context, x_0 + cell*6, y_0 + cell*7),
 
-            Box(context, x_0 + cell*1, y_0 + cell*8),
-            Box(context, x_0 + cell*6, y_0 + cell*8),
-            Box(context, x_0 + cell*8, y_0 + cell*8),
-            Box(context, x_0 + cell*9, y_0 + cell*8),
-            Box(context, x_0 + cell*10, y_0 + cell*8),
-            Box(context, x_0 + cell*11, y_0 + cell*8),
+                Box(context, x_0 + cell*1, y_0 + cell*8),
+                Box(context, x_0 + cell*6, y_0 + cell*8),
+                Box(context, x_0 + cell*8, y_0 + cell*8),
+                Box(context, x_0 + cell*9, y_0 + cell*8),
+                Box(context, x_0 + cell*10, y_0 + cell*8),
+                Box(context, x_0 + cell*11, y_0 + cell*8),
 
-            Box(context, x_0 + cell*1, y_0 + cell*9),
-            Box(context, x_0 + cell*3, y_0 + cell*9),
-            Box(context, x_0 + cell*4, y_0 + cell*9),
-            Box(context, x_0 + cell*5, y_0 + cell*9),
-            Box(context, x_0 + cell*6, y_0 + cell*9),
+                Box(context, x_0 + cell*1, y_0 + cell*9),
+                Box(context, x_0 + cell*3, y_0 + cell*9),
+                Box(context, x_0 + cell*4, y_0 + cell*9),
+                Box(context, x_0 + cell*5, y_0 + cell*9),
+                Box(context, x_0 + cell*6, y_0 + cell*9),
 
-            Box(context, x_0 + cell*1, y_0 + cell*10),
-            Box(context, x_0 + cell*6, y_0 + cell*10),
-            Box(context, x_0 + cell*8, y_0 + cell*10),
-            Box(context, x_0 + cell*9, y_0 + cell*10),
-            Box(context, x_0 + cell*10, y_0 + cell*10),
+                Box(context, x_0 + cell*1, y_0 + cell*10),
+                Box(context, x_0 + cell*6, y_0 + cell*10),
+                Box(context, x_0 + cell*8, y_0 + cell*10),
+                Box(context, x_0 + cell*9, y_0 + cell*10),
+                Box(context, x_0 + cell*10, y_0 + cell*10),
 
-            Box(context, x_0 + cell*5, y_0 + cell*0),
-            Box(context, x_0 + cell*5, y_0 + cell*1),
-            Box(context, x_0 + cell*5, y_0 + cell*2),
-            Box(context, x_0 + cell*5, y_0 + cell*3),
+                Box(context, x_0 + cell*5, y_0 + cell*0),
+                Box(context, x_0 + cell*5, y_0 + cell*1),
+                Box(context, x_0 + cell*5, y_0 + cell*2),
+                Box(context, x_0 + cell*5, y_0 + cell*3),
 
-            Box(context, x_0 + cell*7, y_0 + cell*1),
-            Box(context, x_0 + cell*7, y_0 + cell*2),
-            Box(context, x_0 + cell*7, y_0 + cell*3),
-            Box(context, x_0 + cell*8, y_0 + cell*1),
-            Box(context, x_0 + cell*9, y_0 + cell*1),
-            Box(context, x_0 + cell*10, y_0 + cell*1),
+                Box(context, x_0 + cell*7, y_0 + cell*1),
+                Box(context, x_0 + cell*7, y_0 + cell*2),
+                Box(context, x_0 + cell*7, y_0 + cell*3),
+                Box(context, x_0 + cell*8, y_0 + cell*1),
+                Box(context, x_0 + cell*9, y_0 + cell*1),
+                Box(context, x_0 + cell*10, y_0 + cell*1),
 
-            Box(context, x_0 + cell*8, y_0 + cell*3),
-            Box(context, x_0 + cell*9, y_0 + cell*3),
-            Box(context, x_0 + cell*10, y_0 + cell*3),
+                Box(context, x_0 + cell*8, y_0 + cell*3),
+                Box(context, x_0 + cell*9, y_0 + cell*3),
+                Box(context, x_0 + cell*10, y_0 + cell*3),
 
-            Box(context, x_0 + cell*10, y_0 + cell*5),
-            Box(context, x_0 + cell*10, y_0 + cell*6),
-            Box(context, x_0 + cell*11, y_0 + cell*6),
-            
-        ];
+                Box(context, x_0 + cell*10, y_0 + cell*5),
+                Box(context, x_0 + cell*10, y_0 + cell*6),
+                Box(context, x_0 + cell*11, y_0 + cell*6),
+                
+            ];
+        }else if(map == "Dessert"){
+            var imageUrl = "./resources/map3.jpg";
+            $("#map-canvas").css("background-image", "url(" + imageUrl + ")");
+            pool = Desert_pool(context, gameArea.getLeft()-30 + cell*6, gameArea.getTop()-30 + cell*6); 
+            boxes = [
+                //overlap the pool
+                Box_desert(context, x_0 + cell*5, y_0 + cell*5),
+                Box_desert(context, x_0 + cell*5, y_0 + cell*6),
+                Box_desert(context, x_0 + cell*6, y_0 + cell*5),
+                Box_desert(context, x_0 + cell*6, y_0 + cell*6),
+                //surround the pool
+                // Box_desert(context, x_0 + cell*4, y_0 + cell*4),
+                // Box_desert(context, x_0 + cell*4, y_0 + cell*5),
+                // Box_desert(context, x_0 + cell*4, y_0 + cell*6),
+                // Box_desert(context, x_0 + cell*4, y_0 + cell*7),
+                // Box_desert(context, x_0 + cell*7, y_0 + cell*4),
+                // Box_desert(context, x_0 + cell*7, y_0 + cell*5),
+                // Box_desert(context, x_0 + cell*7, y_0 + cell*6),
+                // Box_desert(context, x_0 + cell*7, y_0 + cell*7),
+                // Box_desert(context, x_0 + cell*5, y_0 + cell*4),
+                // Box_desert(context, x_0 + cell*6, y_0 + cell*4),
+                // Box_desert(context, x_0 + cell*5, y_0 + cell*7),
+                // Box_desert(context, x_0 + cell*6, y_0 + cell*7),
+
+
+                Box_desert(context, x_0 + cell*1, y_0 + cell*1),
+                Box_desert(context, x_0 + cell*1, y_0 + cell*2),
+                Box_desert(context, x_0 + cell*2, y_0 + cell*1),
+                Box_desert(context, x_0 + cell*2, y_0 + cell*3),
+                Box_desert(context, x_0 + cell*2, y_0 + cell*4),
+
+                Box_desert(context, x_0 + cell*2, y_0 + cell*5),
+                Box_desert(context, x_0 + cell*3, y_0 + cell*5),
+                // Box_desert(context, x_0 + cell*4, y_0 + cell*5),
+
+                
+
+                Box_desert(context, x_0 + cell*7, y_0 + cell*5),
+                Box_desert(context, x_0 + cell*8, y_0 + cell*5),
+
+
+                Box_desert(context, x_0 + cell*1, y_0 + cell*7),
+                Box_desert(context, x_0 + cell*2, y_0 + cell*7),
+                Box_desert(context, x_0 + cell*3, y_0 + cell*7),
+                // Box_desert(context, x_0 + cell*4, y_0 + cell*7),
+                // Box_desert(context, x_0 + cell*6, y_0 + cell*7),
+
+                Box_desert(context, x_0 + cell*1, y_0 + cell*8),
+                Box_desert(context, x_0 + cell*6, y_0 + cell*8),
+                Box_desert(context, x_0 + cell*8, y_0 + cell*8),
+                Box_desert(context, x_0 + cell*9, y_0 + cell*8),
+                Box_desert(context, x_0 + cell*10, y_0 + cell*8),
+                Box_desert(context, x_0 + cell*11, y_0 + cell*8),
+
+                Box_desert(context, x_0 + cell*1, y_0 + cell*9),
+                Box_desert(context, x_0 + cell*3, y_0 + cell*9),
+                Box_desert(context, x_0 + cell*4, y_0 + cell*9),
+                Box_desert(context, x_0 + cell*5, y_0 + cell*9),
+                Box_desert(context, x_0 + cell*6, y_0 + cell*9),
+
+                Box_desert(context, x_0 + cell*1, y_0 + cell*10),
+                Box_desert(context, x_0 + cell*6, y_0 + cell*10),
+                Box_desert(context, x_0 + cell*8, y_0 + cell*10),
+                Box_desert(context, x_0 + cell*9, y_0 + cell*10),
+                Box_desert(context, x_0 + cell*10, y_0 + cell*10),
+
+                Box_desert(context, x_0 + cell*5, y_0 + cell*0),
+                Box_desert(context, x_0 + cell*5, y_0 + cell*1),
+                Box_desert(context, x_0 + cell*5, y_0 + cell*2),
+                Box_desert(context, x_0 + cell*5, y_0 + cell*3),
+
+                Box_desert(context, x_0 + cell*7, y_0 + cell*1),
+                Box_desert(context, x_0 + cell*7, y_0 + cell*2),
+                Box_desert(context, x_0 + cell*7, y_0 + cell*3),
+                Box_desert(context, x_0 + cell*8, y_0 + cell*1),
+                Box_desert(context, x_0 + cell*9, y_0 + cell*1),
+                Box_desert(context, x_0 + cell*10, y_0 + cell*1),
+
+                Box_desert(context, x_0 + cell*8, y_0 + cell*3),
+                Box_desert(context, x_0 + cell*9, y_0 + cell*3),
+                Box_desert(context, x_0 + cell*10, y_0 + cell*3),
+
+                Box_desert(context, x_0 + cell*10, y_0 + cell*5),
+                Box_desert(context, x_0 + cell*10, y_0 + cell*6),
+                Box_desert(context, x_0 + cell*11, y_0 + cell*6),
+                
+            ];
+        }else if(map == "Grassland"){
+            var imageUrl = "./resources/map2.jpg";
+            $("#map-canvas").css("background-image", "url(" + imageUrl + ")");
+            pool = Ice_pool(context, gameArea.getLeft()-30 + cell*6, gameArea.getTop()-30 + cell*6); 
+            boxes = [
+                //overlap the pool
+                Box_grass(context, x_0 + cell*5, y_0 + cell*5),
+                Box_grass(context, x_0 + cell*5, y_0 + cell*6),
+                Box_grass(context, x_0 + cell*6, y_0 + cell*5),
+                Box_grass(context, x_0 + cell*6, y_0 + cell*6),
+
+                Box_grass(context, x_0 + cell*1, y_0 + cell*1),
+                Box_grass(context, x_0 + cell*1, y_0 + cell*2),
+                Box_grass(context, x_0 + cell*2, y_0 + cell*1),
+                Box_grass(context, x_0 + cell*2, y_0 + cell*3),
+                Box_grass(context, x_0 + cell*2, y_0 + cell*4),
+
+                Box_grass(context, x_0 + cell*2, y_0 + cell*5),
+                Box_grass(context, x_0 + cell*3, y_0 + cell*5),
+                // Box_grass(context, x_0 + cell*4, y_0 + cell*5),
+
+                
+
+                Box_grass(context, x_0 + cell*7, y_0 + cell*5),
+                Box_grass(context, x_0 + cell*8, y_0 + cell*5),
+
+
+                Box_grass(context, x_0 + cell*1, y_0 + cell*7),
+                Box_grass(context, x_0 + cell*2, y_0 + cell*7),
+                Box_grass(context, x_0 + cell*3, y_0 + cell*7),
+                // Box_grass(context, x_0 + cell*4, y_0 + cell*7),
+                // Box_grass(context, x_0 + cell*6, y_0 + cell*7),
+
+                Box_grass(context, x_0 + cell*1, y_0 + cell*8),
+                Box_grass(context, x_0 + cell*6, y_0 + cell*8),
+                Box_grass(context, x_0 + cell*8, y_0 + cell*8),
+                Box_grass(context, x_0 + cell*9, y_0 + cell*8),
+                Box_grass(context, x_0 + cell*10, y_0 + cell*8),
+                Box_grass(context, x_0 + cell*11, y_0 + cell*8),
+
+                Box_grass(context, x_0 + cell*1, y_0 + cell*9),
+                Box_grass(context, x_0 + cell*3, y_0 + cell*9),
+                Box_grass(context, x_0 + cell*4, y_0 + cell*9),
+                Box_grass(context, x_0 + cell*5, y_0 + cell*9),
+                Box_grass(context, x_0 + cell*6, y_0 + cell*9),
+
+                Box_grass(context, x_0 + cell*1, y_0 + cell*10),
+                Box_grass(context, x_0 + cell*6, y_0 + cell*10),
+                Box_grass(context, x_0 + cell*8, y_0 + cell*10),
+                Box_grass(context, x_0 + cell*9, y_0 + cell*10),
+                Box_grass(context, x_0 + cell*10, y_0 + cell*10),
+
+                Box_grass(context, x_0 + cell*5, y_0 + cell*0),
+                Box_grass(context, x_0 + cell*5, y_0 + cell*1),
+                Box_grass(context, x_0 + cell*5, y_0 + cell*2),
+                Box_grass(context, x_0 + cell*5, y_0 + cell*3),
+
+                Box_grass(context, x_0 + cell*7, y_0 + cell*1),
+                Box_grass(context, x_0 + cell*7, y_0 + cell*2),
+                Box_grass(context, x_0 + cell*7, y_0 + cell*3),
+                Box_grass(context, x_0 + cell*8, y_0 + cell*1),
+                Box_grass(context, x_0 + cell*9, y_0 + cell*1),
+                Box_grass(context, x_0 + cell*10, y_0 + cell*1),
+
+                Box_grass(context, x_0 + cell*8, y_0 + cell*3),
+                Box_grass(context, x_0 + cell*9, y_0 + cell*3),
+                Box_grass(context, x_0 + cell*10, y_0 + cell*3),
+
+                Box_grass(context, x_0 + cell*10, y_0 + cell*5),
+                Box_grass(context, x_0 + cell*10, y_0 + cell*6),
+                Box_grass(context, x_0 + cell*11, y_0 + cell*6),
+                
+            ];
+        }
+        
         /* The main processing of the game */
         let bombTime = 0;
         let frozen = 0;
@@ -367,6 +539,11 @@
             for(var i=0; i<boxes.length;i++){
                 boxes[i].draw(now);
             }
+            // console.log(pool);
+            if(pool){
+                pool.draw();
+            }
+            
             gem.draw();
             player_red.draw();
             player_blue.draw();
