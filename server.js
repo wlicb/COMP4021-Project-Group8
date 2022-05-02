@@ -386,6 +386,10 @@ io.on("connection", (socket) => {
             if (r.name == room) {
                 r.ready1 = 0;
                 r.ready2 = 0;
+                r.user1Gem = 0;
+                r.user2Gem = 0;
+                r.user1HP = 3;
+                r.user2HP = 3;
             }
         }
         fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
@@ -395,12 +399,6 @@ io.on("connection", (socket) => {
         const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
         for (var r of roomStatus) {
             if (r.name == info.room) {
-                // r.ready1 = 0;
-                // r.ready2 = 0;
-                r.user1Gem = 0;
-                r.user2Gem = 0;
-                r.user1HP = 3;
-                r.user2HP = 3;
                 if (info.user == "1") {
                     io.emit("hide player 1 ready", info.room);
                 } else if (info.user == "2") {
