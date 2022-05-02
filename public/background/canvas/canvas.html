@@ -100,6 +100,7 @@
         let hpOfOpponent = 3;
         let hp = 3;
         let countDown = 3;
+        let dir = 0;
         /* Create the game area */
         const gameArea = BoundingBox(context, 30, 30, 690, 690);
 
@@ -189,7 +190,7 @@
             GameSocket.listenPlayer(player_red);
             GameSocket.listenSpeedUp(player_red);
         }
-        let gem = Gem(context, 260, 410, "green");        // The gem
+        let gem = Gem(context, 320, 440, "green");        // The gem
         let banana = Banana(context, 30, 690, "green"); 
         let bomb = Bomb(context, 690, 30, "green"); 
         let pool;
@@ -676,13 +677,19 @@
                         GameSocket.speedUp(room, user, 0);
                     }
                 } else {
-                    player.stop(5);
-                    GameSocket.updatePlayer(room, 5, 1, user, player.getXY());
-                    setTimeout(() => {
-                        player.stop(0);
-                        GameSocket.updatePlayer(room, 0, 1, user, player.getXY());
-                        frozen = 0;
-                    }, 2000);
+                    if (dir == 0) {
+                        setTimeout(() => {
+                            player.stop(0);
+                            GameSocket.updatePlayer(room, 0, 1, user, player.getXY());
+                            frozen = 0;
+                            dir = 0;
+                        }, 2000);
+                        dir = 5;
+                        player.stop(5);
+                        GameSocket.updatePlayer(room, 5, 1, user, player.getXY());
+                        player.slowDown();
+                        GameSocket.speedUp(room, user, 1);
+                    }
                 }
             });
             /* Handle the keyup of arrow keys and spacebar */
@@ -708,13 +715,19 @@
                         GameSocket.speedUp(room, user, 1);
                     }  
                 } else {
-                    player.stop(5);
-                    GameSocket.updatePlayer(room, 5, 1, user, player.getXY());
-                    setTimeout(() => {
-                        player.stop(0);
-                        GameSocket.updatePlayer(room, 0, 1, user, player.getXY());
-                        frozen = 0;
-                    }, 2000);
+                    if (dir == 0) {
+                        setTimeout(() => {
+                            player.stop(0);
+                            GameSocket.updatePlayer(room, 0, 1, user, player.getXY());
+                            frozen = 0;
+                            dir = 0;
+                        }, 2000);
+                        dir = 5;
+                        player.stop(5);
+                        GameSocket.updatePlayer(room, 5, 1, user, player.getXY());
+                        player.slowDown();
+                        GameSocket.speedUp(room, user, 1);
+                    }
                 }
             });
 

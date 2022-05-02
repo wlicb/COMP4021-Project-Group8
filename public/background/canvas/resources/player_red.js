@@ -14,7 +14,7 @@ const Player_red = function(ctx, x, y, gameArea) {
         idleUp:    { direction: 1, x: 368, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
         idleRight: { direction: 0, x: 368, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
         idleDown:  { direction: 1, x: 368, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
-        idlePop:   { direction: 1, x: 255, y: 200,width: 67, height: 70, count: 1, timing: 2000, loop: false }, // need to adjust
+        idlePop:   { direction: 1, x: 220, y: 270, width: 67, height: 70, count: 1, timing: 2000, loop: false }, // need to adjust
         
         /* Moving sprite sequences for facing different directions */
         moveLeft:  { direction: 0, x: 210, y: 130, width: 68, height: 66, count: 4, timing: 50, loop: true },
@@ -60,7 +60,10 @@ const Player_red = function(ctx, x, y, gameArea) {
     // This function stops the player from moving.
     // - `dir` - the moving direction when the player is stopped (1: Left, 2: Up, 3: Right, 4: Down)
     const stop = function(dir) {
-        if (direction == dir) {
+        if (dir == 0) {
+            sprite.setSequence(sequences.idleDown);
+            direction = 0;
+        } else if (direction == dir) {
             switch (dir) {
                 case 1: sprite.setSequence(sequences.idleLeft); break;
                 case 2: sprite.setSequence(sequences.idleUp); break;
@@ -70,12 +73,14 @@ const Player_red = function(ctx, x, y, gameArea) {
             direction = 0;
         } else if (dir == 5) {
             sprite.setSequence(sequences.idlePop);
+            direction = 0;
         }
+        
     };
 
     // This function speeds up the player.
     const speedUp = function() {
-        speed = 250;
+        speed = 450;
     };
 
     // This function slows down the player.

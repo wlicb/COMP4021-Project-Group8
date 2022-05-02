@@ -62,8 +62,8 @@ const Player_blue = function(ctx, x, y, gameArea) {
     // - `dir` - the moving direction when the player is stopped (1: Left, 2: Up, 3: Right, 4: Down)
     const stop = function(dir) {
         if (dir == 0) {
-            console.log("hereaaaa");
             sprite.setSequence(sequences.idleDown);
+            direction = 0;
         } else if (direction == dir) {
             switch (dir) {
                 case 1: sprite.setSequence(sequences.idleLeft); break;
@@ -80,7 +80,7 @@ const Player_blue = function(ctx, x, y, gameArea) {
 
     // This function speeds up the player.
     const speedUp = function() {
-        speed = 250;
+        speed = 450;
     };
 
     // This function slows down the player.
