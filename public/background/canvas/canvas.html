@@ -44,6 +44,9 @@
                 <text id="game-title" x="50%" y="45%">POP BATTLE!</text>
                 <text x="50%" y="60%">Click here to start the game</text>
             </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" id="count-down" style="display: none">
+                <text id="count-down-text" x="50%" y="50%">3</text>
+            </svg>
             <div id="game-over" style="display: none">
                 <div id="game-over-text" class="game-over-content">
                 </div>
@@ -96,6 +99,7 @@
         let collectedGemsOfOpponent = 0;
         let hpOfOpponent = 3;
         let hp = 3;
+        let countDown = 3;
         /* Create the game area */
         const gameArea = BoundingBox(context, 30, 30, 690, 690);
 
@@ -397,6 +401,7 @@
             banana = Banana(context, 30, 690, "green"); 
             bomb = Bomb(context, 690, 30, "green"); 
             gameStartTime = 0;
+            countDown = 3;
         });
 
         $("#go-back-button").on("click", () => {
@@ -599,8 +604,10 @@
 
         GameSocket.getSocket().on("all ready", (room) => {
             /* Hide the start screen */
-            $("#game-start").hide();
             sounds.background.play();
+            $("#game-start").fadeOut();
+            countDown = 3;
+            $("#count-down-text").html(countDown);
             /* Handle the keydown of arrow keys and spacebar */
             $(document).on("keydown", function(event) {
                 /* TODO */
@@ -651,9 +658,27 @@
                     }  
                 }
             });
+
+            $("#count-down").fadeIn();
+
+            const count = function() {
+                countDown--;
+                $("#count-down-text").html(countDown);
+                if (countDown == 0) {              
+                    $("#count-down").fadeOut();
+                    requestAnimationFrame(doFrame);
+                } else {
+                    setTimeout(count, 1000);
+                }
+            }
+
+
+
+            setTimeout(count, 1000);
+
             
             /* Start the game */
-            requestAnimationFrame(doFrame);
+            // requestAnimationFrame(doFrame);
         });
     });
     </script>

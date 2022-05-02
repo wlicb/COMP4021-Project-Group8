@@ -184,6 +184,7 @@ app.post("/newRoom", (req, res) => {
 app.post("/leaveRoom", (req, res) => {
     const room = req.body.room;
     const user = req.body.user;
+    const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json"));
     const rooms = JSON.parse(fs.readFileSync("./data/rooms.json"));
 
     for (const r of rooms) {
@@ -201,9 +202,16 @@ app.post("/leaveRoom", (req, res) => {
         }
         if ((r.user1 == "-") && (r.user2 == "-")) {
             rooms.splice(rooms.indexOf(r), 1);
+            for (const t of roomStatus) {
+                if (t.name == r.name) {
+                    roomStatus.splice(roomStatus.indexOf(t), 1);
+                    console.log("delete");
+                }
+            }
         }
     }
     fs.writeFileSync("./data/rooms.json", JSON.stringify(rooms, null, " "));
+    fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
     io.emit("show room", rooms);
     res.json({status: "success", rooms: rooms});
 });
