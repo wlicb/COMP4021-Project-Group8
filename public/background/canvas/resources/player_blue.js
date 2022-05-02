@@ -61,14 +61,19 @@ const Player_blue = function(ctx, x, y, gameArea) {
     // This function stops the player from moving.
     // - `dir` - the moving direction when the player is stopped (1: Left, 2: Up, 3: Right, 4: Down)
     const stop = function(dir) {
-        if (direction == dir) {
+        if (dir == 0) {
+            console.log("hereaaaa");
+            sprite.setSequence(sequences.idleDown);
+        } else if (direction == dir) {
             switch (dir) {
                 case 1: sprite.setSequence(sequences.idleLeft); break;
                 case 2: sprite.setSequence(sequences.idleUp); break;
                 case 3: sprite.setSequence(sequences.idleRight); break;
                 case 4: sprite.setSequence(sequences.idleDown); break;
-                case 5: sprite.setSequence(sequences.idlePop); break;
             }
+            direction = 0;
+        } else if (dir == 5) {
+            sprite.setSequence(sequences.idlePop);
             direction = 0;
         }
     };

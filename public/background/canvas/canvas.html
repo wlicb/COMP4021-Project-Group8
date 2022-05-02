@@ -109,6 +109,10 @@
         let player_blue = Player_blue(context, 30, 30, gameArea);
         let player;
         // console.log(Rooms);
+        // let bombTime = 0;
+        let frozen = 0;
+
+        /* handle cookies */
         const cookies = document.cookie.split(";");
         console.log(document.cookie);
         const cookieElement = {};
@@ -185,7 +189,7 @@
             GameSocket.listenPlayer(player_red);
             GameSocket.listenSpeedUp(player_red);
         }
-        let gem = Gem(context, 260, 440, "green");        // The gem
+        let gem = Gem(context, 260, 410, "green");        // The gem
         let banana = Banana(context, 30, 690, "green"); 
         let bomb = Bomb(context, 690, 30, "green"); 
         let pool;
@@ -403,8 +407,6 @@
         }
         
         /* The main processing of the game */
-        let bombTime = 0;
-        let frozen = 0;
 
         $("#restart-button").on("click", () => {
             GameSocket.restartGame(room, user);
@@ -421,6 +423,7 @@
             // player_blue = Player_blue(context, 30, 30, gameArea);
             gameStartTime = 0;
             countDown = 3;
+            frozen = 0;
         });
 
         $("#go-back-button").on("click", () => {
@@ -609,7 +612,13 @@
                 const {x, y} = bomb.randomize(gameArea, boxes, boxes.length);
                 GameSocket.updateBomb(room, x, y);
                 GameSocket.updateHP(user, -1, room);
+                // bombTime = now + 3000;
+                frozen = 1;
             }
+
+            // if (now > bombTime) {
+            //     frozen = 0;
+            // }
             /* Clear the screen */
             context.clearRect(0, 0, cv.width, cv.height);
 
@@ -666,6 +675,14 @@
                         player.speedUp();
                         GameSocket.speedUp(room, user, 0);
                     }
+                } else {
+                    player.stop(5);
+                    GameSocket.updatePlayer(room, 5, 1, user, player.getXY());
+                    setTimeout(() => {
+                        player.stop(0);
+                        GameSocket.updatePlayer(room, 0, 1, user, player.getXY());
+                        frozen = 0;
+                    }, 2000);
                 }
             });
             /* Handle the keyup of arrow keys and spacebar */
@@ -690,6 +707,14 @@
                         player.slowDown();
                         GameSocket.speedUp(room, user, 1);
                     }  
+                } else {
+                    player.stop(5);
+                    GameSocket.updatePlayer(room, 5, 1, user, player.getXY());
+                    setTimeout(() => {
+                        player.stop(0);
+                        GameSocket.updatePlayer(room, 0, 1, user, player.getXY());
+                        frozen = 0;
+                    }, 2000);
                 }
             });
 
@@ -700,6 +725,8 @@
                 $("#count-down-text").html(countDown);
                 if (countDown == 0) {              
                     $("#count-down").fadeOut();
+                    player.stop(0);
+                    GameSocket.updatePlayer(room, 0, 1, user, player.getXY());
                     requestAnimationFrame(doFrame);
                 } else {
                     setTimeout(count, 1000);

@@ -14,7 +14,8 @@ const Player_red = function(ctx, x, y, gameArea) {
         idleUp:    { direction: 1, x: 368, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
         idleRight: { direction: 0, x: 368, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
         idleDown:  { direction: 1, x: 368, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
-
+        idlePop:   { direction: 1, x: 255, y: 200,width: 67, height: 70, count: 1, timing: 2000, loop: false }, // need to adjust
+        
         /* Moving sprite sequences for facing different directions */
         moveLeft:  { direction: 0, x: 210, y: 130, width: 68, height: 66, count: 4, timing: 50, loop: true },
         moveUp:    { direction: 1, x: 70,  y: 130, width: 68, height: 70, count: 4, timing: 50, loop: true },
@@ -67,6 +68,8 @@ const Player_red = function(ctx, x, y, gameArea) {
                 case 4: sprite.setSequence(sequences.idleDown); break;
             }
             direction = 0;
+        } else if (dir == 5) {
+            sprite.setSequence(sequences.idlePop);
         }
     };
 
