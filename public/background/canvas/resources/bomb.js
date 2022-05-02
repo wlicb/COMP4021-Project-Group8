@@ -3,15 +3,15 @@
 // - `x` - The initial x position of the gem
 // - `y` - The initial y position of the gem
 // - `color` - The colour of the gem
-const Gem = function(ctx, x, y, color) {
+const Bomb = function(ctx, x, y, color) {
 
     // This is the sprite sequences of the gem of four colours
     // `green`, `red`, `yellow` and `purple`.
     const sequences = {
-        green:  { direction: 0, x: 0, y:  0, width: 38, height: 38, count: 1, timing: 200, loop: true },
-        red:    { direction: 0, x: 0, y:  0, width: 38, height: 38, count: 1, timing: 200, loop: true },
-        yellow: { direction: 0, x: 0, y:  0, width: 38, height: 38, count: 1, timing: 200, loop: true },
-        purple: { direction: 0, x: 0, y:  0, width: 38, height: 38, count: 1, timing: 200, loop: true }
+        green:  { direction: 0, x: 0, y:  0, width: 38, height: 38, count: 1, timing: 200, loop: false },
+        red:    { direction: 0, x: 0, y:  0, width: 38, height: 38, count: 1, timing: 200, loop: false },
+        yellow: { direction: 0, x: 0, y:  0, width: 38, height: 38, count: 1, timing: 200, loop: false },
+        purple: { direction: 0, x: 0, y:  0, width: 38, height: 38, count: 1, timing: 200, loop: false }
     };
 
     // This is the sprite object of the gem created from the Sprite module.
@@ -21,7 +21,7 @@ const Gem = function(ctx, x, y, color) {
     sprite.setSequence(sequences[color])
           .setScale(1)
           .setShadowScale({ x: 0.75, y: 0.2 })
-          .useSheet("./resources/gem1.png");
+          .useSheet("./resources/bomb.png");
 
     // This is the birth time of the gem for finding its age.
     let birthTime = performance.now();
@@ -45,6 +45,7 @@ const Gem = function(ctx, x, y, color) {
         /* Randomize the color */
         const colors = ["green", "red", "yellow", "purple"];
         setColor(colors[Math.floor(Math.random() * 4)]);
+
         while (true) {
             /* Randomize the position */
             const {x, y} = area.randomPoint();
@@ -61,10 +62,8 @@ const Gem = function(ctx, x, y, color) {
                 return {x ,y};
                 // break;
             }
-
         }
     };
-
     const setXY = function(xvalue, yvalue) {
         birthTime = performance.now();
         sprite.setXY(xvalue, yvalue);

@@ -3,7 +3,7 @@
 // - `x` - The initial x position of the player
 // - `y` - The initial y position of the player
 // - `gameArea` - The bounding box of the game area
-const Player = function(ctx, x, y, gameArea) {
+const Player_red = function(ctx, x, y, gameArea) {
 
     // This is the sprite sequences of the player facing different directions.
     // It contains the idling sprite sequences `idleLeft`, `idleUp`, `idleRight` and `idleDown`,
@@ -27,8 +27,8 @@ const Player = function(ctx, x, y, gameArea) {
 
     // The sprite object is configured for the player sprite here.
     sprite.setSequence(sequences.idleDown)
-          .setScale(1)
-          .setShadowScale({ x: 0.75, y: 0.20 })
+          .setScale(0.6)
+          .setShadowScale({ x: 0.5, y: 0.1 })
           .useSheet("./resources/unit_red.png");
 
     // This is the moving direction, which can be a number from 0 to 4:
@@ -82,11 +82,12 @@ const Player = function(ctx, x, y, gameArea) {
 
     // This function updates the player depending on his movement.
     // - `time` - The timestamp when this function is called
-    const update = function(time) {
+    const update = function(time, boxes, length) {
         /* Update the player if the player is moving */
         if (direction != 0) {
             let { x, y } = sprite.getXY();
-
+            let oX = x;
+            let oY = y;
             /* Move the player */
             switch (direction) {
                 case 1: x -= speed / 60; break;
@@ -94,15 +95,24 @@ const Player = function(ctx, x, y, gameArea) {
                 case 3: x += speed / 60; break;
                 case 4: y += speed / 60; break;
             }
-
+            sprite.setXY(x, y);
             /* Set the new position if it is within the game area */
-            if (gameArea.isPointInBox(x, y))
-                sprite.setXY(x, y);
+            if (!((gameArea.isPointInBox(x, y)) && (!checkOverlap(sprite, boxes, length)))) {
+                sprite.setXY(oX, oY);
+            }
         }
-
         /* Update the sprite object */
         sprite.update(time);
     };
+
+    const checkOverlap = function(sprite, boxes, length) {
+        for (var i = 0; i < length; i++) {
+            if (sprite.getBoundingBox().intersect(boxes[i].getBoundingBox())) {        
+                return true;
+            }
+        }
+        return false;
+    }
 
     // The methods are returned as an object here.
     return {
@@ -112,6 +122,8 @@ const Player = function(ctx, x, y, gameArea) {
         slowDown: slowDown,
         getBoundingBox: sprite.getBoundingBox,
         draw: sprite.draw,
-        update: update
+        update: update,
+        setXY: sprite.setXY,
+        getXY: sprite.getXY
     };
 };

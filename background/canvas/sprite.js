@@ -8,6 +8,7 @@ const Sprite = function(ctx, x, y) {
     const sheet = new Image();
 
     // This is an object containing the sprite sequence information used by the sprite containing:
+    // direction: 0 - row, 1 - colonm
     // - `x` - The starting x position of the sprite sequence in the sprite sheet
     // - `y` - The starting y position of the sprite sequence in the sprite sheet
     // - `width` - The width of each sprite image
@@ -15,7 +16,7 @@ const Sprite = function(ctx, x, y) {
     // - `count` - The total number of sprite images in the sequence
     // - `timing` - The timing for each sprite image
     // - `loop` - `true` if the sprite sequence is looped
-    let sequence = { x: 0, y: 0, width: 20, height: 20, count: 1, timing: 0, loop: false };
+    let sequence = { direction: 0, x: 0, y: 0, width: 20, height: 20, count: 1, timing: 0, loop: false };
 
     // This is the index indicating the current sprite image used in the sprite sequence.
     let index = 0;
@@ -136,15 +137,19 @@ const Sprite = function(ctx, x, y) {
         /* Get the display size of the sprite */
         const size = getDisplaySize();
 
-
+        
         /* TODO */
         /* Replace the following code to draw the sprite correctly */
-        // ctx.fillStyle = "red";
-        // ctx.globalAlpha = 0.6;
-        ctx.drawImage(sheet, sequence.x + index * sequence.width, sequence.y, 
-            sequence.width, sequence.height, 
-            x - size.width / 2, y - size.height / 2, size.width, size.height);
-
+        // let sequence = { x: 0, y: 0, width: 20, height: 20, count: 1, timing: 0, loop: false };
+        // let index = 0;
+        if(sequence.direction ==0){
+            ctx.drawImage(sheet, sequence.x+index*sequence.width, sequence.y, sequence.width, sequence.height, 
+                parseInt(x - size.width / 2), parseInt(y - size.height / 2), size.width, size.height);
+        }else{
+            ctx.drawImage(sheet, sequence.x, sequence.y+index*sequence.height, sequence.width, sequence.height, 
+                            parseInt(x - size.width / 2), parseInt(y - size.height / 2), size.width, size.height);
+        }
+        // console.log(sequence); 
         /* Restore saved settings */
         ctx.restore();
     };
@@ -167,20 +172,19 @@ const Sprite = function(ctx, x, y) {
 
         /* TODO */
         /* Move to the next sprite when the timing is right */
-        // if (sequence.count == 3) {
-        //     console.log(index);
-        // }
-        if (time - lastUpdate >= sequence.timing) {
+        if(time - lastUpdate >= sequence.timing){
             index++;
-            if (index >= sequence.count) {
-                if (sequence.loop) {
+            // console.log(sequence.count);
+            if (index >= sequence.count){
+                if(sequence.loop){
                     index = 0;
-                } else {
+                }else{
                     index = sequence.count - 1;
                 }
             }
             lastUpdate = time;
         }
+
         return this;
     };
 

@@ -38,7 +38,7 @@ const chatSession = session({
     resave: false,
     saveUninitialized: false,
     rolling: true,
-    cookie: { maxAge: 300000 }
+    // cookie: { maxAge: 3000000 }    // changed to 50 mins
 });
 app.use(chatSession);
 
@@ -50,7 +50,7 @@ function containWordCharsOnly(text) {
 // Handle the /register endpoint
 app.post("/register", (req, res) => {
     // Get the JSON data from the body
-    const { username, avatar, name, password } = req.body;
+    const { username, name, password } = req.body;
 
     //
     // D. Reading the users.json file
@@ -62,12 +62,6 @@ app.post("/register", (req, res) => {
     //
     if (username == "") {
         res.json({ error: "Please enter username"});
-        return;
-    } else if (avatar == "") {
-        res.json({ error: "Please enter avatar"});
-        return;
-    } else if (name == "") {
-        res.json({ error: "Please enter name"});
         return;
     } else if (password == "") {
         res.json({ error: "Please enter password"});
@@ -83,7 +77,7 @@ app.post("/register", (req, res) => {
     // G. Adding the new user account
     //
     const hash = bcrypt.hashSync(password, 10);
-    users[username] = { avatar : avatar, name : name, password : hash };
+    users[username] = { name : name, password : hash };
 
     //
     // H. Saving the users.json file
@@ -119,11 +113,10 @@ app.post("/signin", (req, res) => {
             res.json({ error: "Incorrect username/password."});
             return;
         } else {
-            const avatar = users[username].avatar;
             const name = users[username].name;
-            req.session.user = { username, avatar, name };
+            req.session.user = { username,  name };
             res.json({ status: "success",
-                        user: { username, avatar, name }});
+                        user: { username, name }});
             return;
         }
     } else {
@@ -144,9 +137,8 @@ app.get("/validate", (req, res) => {
     //
     if (currentUser) {
         const username = currentUser.username;
-        const avatar = currentUser.avatar;
         const name = currentUser.name;
-        res.json({status: "success", user: {username, avatar, name}});
+        res.json({status: "success", user: {username, name}});
         return;
     } else {
         res.json({status: "error", error: "session out"});
@@ -192,6 +184,7 @@ app.post("/newRoom", (req, res) => {
 app.post("/leaveRoom", (req, res) => {
     const room = req.body.room;
     const user = req.body.user;
+    const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json"));
     const rooms = JSON.parse(fs.readFileSync("./data/rooms.json"));
 
     for (const r of rooms) {
@@ -209,9 +202,16 @@ app.post("/leaveRoom", (req, res) => {
         }
         if ((r.user1 == "-") && (r.user2 == "-")) {
             rooms.splice(rooms.indexOf(r), 1);
+            for (const t of roomStatus) {
+                if (t.name == r.name) {
+                    roomStatus.splice(roomStatus.indexOf(t), 1);
+                    console.log("delete");
+                }
+            }
         }
     }
     fs.writeFileSync("./data/rooms.json", JSON.stringify(rooms, null, " "));
+    fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
     io.emit("show room", rooms);
     res.json({status: "success", rooms: rooms});
 });
@@ -247,20 +247,6 @@ app.post("/joinRoom", (req, res) => {
 
 
 io.on("connection", (socket) => {
-    if (socket.request.session.user) {
-        onlineUsers[socket.request.session.user.username] = { avatar: socket.request.session.user.avatar, 
-        name: socket.request.session.user.name };
-        io.emit("add user", JSON.stringify({ username: socket.request.session.user.username, 
-            avatar: socket.request.session.user.avatar, name: socket.request.session.user.name }));
-    }
-    // console.log(onlineUsers);
-
-    socket.on("disconnect", () => {
-        delete onlineUsers[socket.request.session.user.username];
-        // console.log(onlineUsers);
-        io.emit("remove user", JSON.stringify({ username: socket.request.session.user.username, 
-            avatar: socket.request.session.user.avatar, name: socket.request.session.user.name }));
-    });
 
     socket.on("get users", () => {
         // Send the online users to the browser
@@ -282,13 +268,165 @@ io.on("connection", (socket) => {
 
     socket.on("start game", (room) => {
         // console.log(room);
+        const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
+        // const ready = 0;
+        const newRoom = { 
+            name: room.name, 
+            ready1: 0, 
+            ready2: 0,
+            timeRemaining: 60,
+            user1Gem: 0,
+            user2Gem: 0,
+            user1HP: 3,
+            user2HP: 3
+            // gemLocationX: 0,
+            // gemLocationY: 0
+        }
+        roomStatus.push(newRoom);
+        fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
         io.emit("get into game", room);
+    });
+
+    socket.on("update player", (info) => {
+        io.emit("move player", info);
+    });
+
+    socket.on("ready", (info) => {
+        const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
+        // console.log("123344565");
+        for (var r of roomStatus) {
+            if (r.name == info.room) {
+                if (info.user == "1") {
+                    r.ready1++;
+                    io.emit("player 1 ready", info.room);
+                }
+                else if (info.user == "2") {
+                    r.ready2++;
+                    io.emit("player 2 ready", info.room);
+                }
+                if ((r.ready1 >= 1) && (r.ready2 >= 1)) {
+                    io.emit("all ready", info.room);
+                    // console.log("34224");
+                }
+            }
+        }
+        fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
+    });
+
+    socket.on("update gem", (info) => {
+        // const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
+        // for (var r of roomStatus) {
+        //     if (r.name == room) {
+        //         r.gemLocationX = info.x;
+        //         r.gemLocationY = info.y;
+        //     }
+        // }
+        // fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
+        io.emit("move gem", info);
+    });
+
+    socket.on("speed up", (info) => {
+        // console.log("aafdsfdsffdsf");
+        io.emit("speed up player", info);
+    });
+    socket.on("update banana", (info) => {
+        io.emit("move banana", info);
+    });
+    socket.on("update bomb", (info) => {
+        io.emit("move bomb", info);
+    });
+    socket.on("update score", (info) => {
+        const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
+        console.log("score is updating");
+        let value = 0;
+        for (var r of roomStatus) {
+            if (r.name == info.room) {
+                if (info.user == 1) {
+                    r.user1Gem += info.value;
+                    value = r.user1Gem;
+                }
+                else if (info.user == 2) {
+                    r.user2Gem += info.value;
+                    value = r.user2Gem;
+                }
+            }
+        }
+        fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
+        const res = { user: info.user, value: value, room: info.room };
+        io.emit("show score", res);
+    });
+
+    socket.on("update hp", (info) => {
+        const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
+        let value = 0;
+        console.log("hp is updating");
+        for (var r of roomStatus) {
+            if (r.name == info.room) {
+                if (info.user == 1) {
+                    r.user1HP += info.value;
+                    value = r.user1HP;
+                }
+                else if (info.user == 2) {
+                    r.user2HP += info.value;
+                    value = r.user2HP;
+                }
+            }
+        }
+        fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
+        const res = { user: info.user, value: value, room: info.room };
+        io.emit("show hp", res);
+    });
+
+    socket.on("restart game", (info) => {
+        const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
+        for (var r of roomStatus) {
+            if (r.name == info.room) {
+                r.ready1 = 0;
+                r.ready2 = 0;
+                r.user1Gem = 0;
+                r.user2Gem = 0;
+                r.user1HP = 3;
+                r.user2HP = 3;
+                if (info.user == "1") {
+                    io.emit("hide player 1 ready", info.room);
+                } else if (info.user == "2") {
+                    io.emit("hide player 2 ready", info.room);
+                }
+            }
+        }
+        fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
+        // const res = { room: room };
+        // io.emit("back to start pane", res);
+    });
+
+    socket.on("quit game", (room) => {
+        const rooms = JSON.parse(fs.readFileSync("./data/rooms.json", "utf-8"));
+        const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
+        for (var i = 0; i < rooms.length; i++) {
+            if (rooms[i].name == room) {
+                console.log(room);
+                rooms.splice(i, 1);
+                // console.log(rooms[i]);
+                // delete rooms[i];
+            }
+        }
+        for (var i = 0; i < roomStatus.length; i++) {
+            if (roomStatus[i].name == room) {
+                console.log(room);
+                roomStatus.splice(i, 1);
+                // console.log(roomStatus[i]);
+                // delete roomStatus[i];
+            }
+        }
+        fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
+        fs.writeFileSync("./data/rooms.json", JSON.stringify(rooms, null, " "));
+        console.log("leaving game");
+        io.emit("leave game", room);
     })
-    
-})
+});
 
 // Use a web server to listen at port 8000
 httpServer.listen(8000, () => {
-    console.log("The chat server has started...");
+    console.log("The server has started...");
 });
 

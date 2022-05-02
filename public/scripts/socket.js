@@ -34,16 +34,35 @@ const Socket = (function() {
 
         socket.on("get into game", (room) => {
             if (Rooms.getRoom().name == room.name) {
+                if (room.user1 == Authentication.getUser().name) {
+                    document.cookie = "player=1; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "player=2; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "room=; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "map=; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "name1=; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "name2=; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "room=" + room.name + "; Path=/;";
+                    document.cookie = "player=1; Path=/;";
+                    document.cookie = "name1=" + room.user1 + "; Path=/;";
+                    document.cookie = "name2=" + room.user2 + "; Path=/;";
+                    document.cookie = "map=" + room.map + "; Path=/;";
+                }
+                else if (room.user2 == Authentication.getUser().name) {
+                    document.cookie = "player=1; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "player=2; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "room=; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "map=; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "name1=; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "name2=; Path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                    document.cookie = "room=" + room.name + "";
+                    document.cookie = "player=2; Path=/;";
+                    document.cookie = "name1=" + room.user1 + "; Path=/;";
+                    document.cookie = "name2=" + room.user2 + "; Path=/;";
+                    document.cookie = "map=" + room.map + "; Path=/;";
+                }
                 document.location.href = "/background/canvas/canvas.html";
-                // fetch("/background/canvas/canvas.html").then((res) => res.text())
-                // .then((html) => {
-                //     console.log(html);
-                //     document.body.innerHTML = html
-                // }).catch(function(err) {  
-                //     console.log('Failed to fetch page: ', err);  
-                // });
             }
-        })
+        });
     };
 
     // This function disconnects the socket from the server
@@ -74,7 +93,8 @@ const Socket = (function() {
 
     const startGame = function(room) {
         socket.emit("start game", room);
-    }
+    };
+
 
     return { getSocket, connect, disconnect, postMessage, reportTyping, stopTyping, updateRoom, startGame };
 })();

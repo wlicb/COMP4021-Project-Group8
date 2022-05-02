@@ -10,18 +10,16 @@ const Player_blue = function(ctx, x, y, gameArea) {
     // and the moving sprite sequences `moveLeft`, `moveUp`, `moveRight` and `moveDown`.
     const sequences = {
         /* Idling sprite sequences for facing different directions */
-        idleLeft:  { direction: 0, x: 379, y: 60, width: 66, height: 66, count: 1, timing: 2000, loop: false },
-        idleUp:    { direction: 1, x: 379, y: 60, width: 66, height: 66, count: 1, timing: 2000, loop: false },
-        idleRight: { direction: 0, x: 379, y: 60, width: 66, height: 66, count: 1, timing: 2000, loop: false },
-        idleDown:  { direction: 1, x: 379, y: 60, width: 66, height: 66, count: 1, timing: 2000, loop: false },
-        // idleDown:   { direction: 1, x: 255, y: 200,width: 67, height: 70, count: 1, timing: 2000, loop: false },
-        idlePop:   { direction: 1, x: 255, y: 200,width: 67, height: 70, count: 1, timing: 2000, loop: false },
+        idleLeft:  { direction: 0, x: 375, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
+        idleUp:    { direction: 1, x: 375, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
+        idleRight: { direction: 0, x: 375, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
+        idleDown:  { direction: 1, x: 375, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
 
         /* Moving sprite sequences for facing different directions */
-        moveLeft:  { direction: 0, x: 254, y: 500, width: 66, height: 66, count: 4, timing: 50, loop: true },
-        moveUp:    { direction: 1, x: 65,  y: 132, width: 66, height: 70, count: 4, timing: 50, loop: true },
-        moveRight: { direction: 0, x: 254, y: 130, width: 66, height: 66, count: 4, timing: 50, loop: true },
-        moveDown:  { direction: 1, x: 135, y: 130, width: 66, height: 70, count: 4, timing: 50, loop: true }
+        moveLeft:  { direction: 0, x: 254, y: 500, width: 68, height: 66, count: 4, timing: 50, loop: true },
+        moveUp:    { direction: 1, x: 60,  y: 130, width: 68, height: 70, count: 4, timing: 50, loop: true },
+        moveRight: { direction: 0, x: 254, y: 130, width: 68, height: 66, count: 4, timing: 50, loop: true },
+        moveDown:  { direction: 1, x: 130, y: 130, width: 68, height: 70, count: 4, timing: 50, loop: true }
     };
 
     // This is the sprite object of the player created from the Sprite module.
@@ -29,9 +27,9 @@ const Player_blue = function(ctx, x, y, gameArea) {
 
     // The sprite object is configured for the player sprite here.
     sprite.setSequence(sequences.idleDown)
-          .setScale(0.6)
-          .setShadowScale({ x: 0.5, y: 0.1 })
-          .useSheet("./resources/unit_blue.png");
+          .setScale(1)
+          .setShadowScale({ x: 0.75, y: 0.20 })
+          .useSheet("unit_blue.png");
 
     // This is the moving direction, which can be a number from 0 to 4:
     // - `0` - not moving
@@ -67,7 +65,6 @@ const Player_blue = function(ctx, x, y, gameArea) {
                 case 2: sprite.setSequence(sequences.idleUp); break;
                 case 3: sprite.setSequence(sequences.idleRight); break;
                 case 4: sprite.setSequence(sequences.idleDown); break;
-                case 5: sprite.setSequence(sequences.idlePop); break;
             }
             direction = 0;
         }
@@ -89,8 +86,8 @@ const Player_blue = function(ctx, x, y, gameArea) {
         /* Update the player if the player is moving */
         if (direction != 0) {
             let { x, y } = sprite.getXY();
-            let oX = x;
-            let oY = y;
+            // let oX = x;
+            // let oY = y;
             /* Move the player */
             switch (direction) {
                 case 1: x -= speed / 60; break;
@@ -98,10 +95,12 @@ const Player_blue = function(ctx, x, y, gameArea) {
                 case 3: x += speed / 60; break;
                 case 4: y += speed / 60; break;
             }
-            sprite.setXY(x, y);
+
             /* Set the new position if it is within the game area */
-            if (!((gameArea.isPointInBox(x, y)) && (!checkOverlap(sprite, boxes, length)))) {
-                sprite.setXY(oX, oY);
+            if ((gameArea.isPointInBox(x, y)) && (!checkOverlap(sprite, boxes, length))) {
+                console.log(checkOverlap(sprite, boxes, length));
+                console.log(direction);
+                sprite.setXY(x, y);
             }
         }
 
@@ -117,7 +116,7 @@ const Player_blue = function(ctx, x, y, gameArea) {
             }
         }
         return false;
-    };
+    }
 
     // The methods are returned as an object here.
     return {
@@ -127,8 +126,6 @@ const Player_blue = function(ctx, x, y, gameArea) {
         slowDown: slowDown,
         getBoundingBox: sprite.getBoundingBox,
         draw: sprite.draw,
-        update: update,
-        setXY: sprite.setXY,
-        getXY: sprite.getXY
+        update: update
     };
 };

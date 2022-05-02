@@ -69,7 +69,9 @@ const Rooms = (function() {
                     console.log(currentRoom);
                     for (const r of json.rooms) {
                         if ((r.name == room.name) && (r.user1 != "-") && (r.user2 != "-")) {
-                            Socket.startGame(currentRoom);
+                            console.log(r.user1);
+                            console.log(r.user2);
+                            Socket.startGame(r);
                         }        
                     }
                 }

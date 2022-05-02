@@ -1,34 +1,36 @@
-@import url("https://fonts.googleapis.com/css2?family=Abel&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Tapestry");
+@import url("https://fonts.googleapis.com/css2?family=Orelega+One");
 :root {
     --material-icons-color: black;
     --field-color: gray;
     --field-background: white;
     --field-background-hover: #eee;
     --input-background: #eee;
-    --overlay-background: rgba(245, 158, 114, 0.8);
-    --overlay-caption-color: #eb4a40;
-    --overlay-content-background: linear-gradient(white, #fde0c5);
+    --overlay-background: rgba(143, 189, 211, 0.8);
+    --overlay-caption-color: #8FBDD3;
+    --overlay-content-background: linear-gradient(white, #E4D1B9);
 
-    --header-background: linear-gradient(to right, #eb4a40, #f59e72);
-    --main-panel-background: linear-gradient(white, #fde0c5);
-    --online-users-panel-background: linear-gradient(to right, #fde0c5, #facba6);
+    --header-background: linear-gradient(to right, #a97155, #BE8C63);
+    --main-panel-background: linear-gradient(white, #BE8C63);
+    --online-users-panel-background: linear-gradient(to right, #E4D1B9, #BE8C63);
     --chat-panel-background: none;
 
     --title-color: white;
-    --caption-color: white;
+    --caption-color: black;
 
     --font-color: black;
-    --date-color: gray;
+    --room-background: pink;
 
-    --register-form-background: linear-gradient(#fde0c5, #facba6);
+    --register-form-background: linear-gradient(#E4D1B9, #BE8C63);
     --warning-color: red;
 
-    --button-color: white;
-    --button-background: #f2855d;
-    --button-background-hover: #f8b58b;
+    --button-color: black;
+    --button-background: #BE8C63;
+    --button-background-hover: #E4D1B9;
 }
 * {
-    font-family: "Abel", sans-serif;
+    font-family: "Josefin Sans", sans-serif;
     color: var(--font-color);
     box-sizing: border-box;
 }
@@ -98,13 +100,14 @@ input::placeholder, select {
 }
 button {
     font-weight: bold;
+    border-radius: 50px;
     height: 40px;
     border: 1px solid black;
     color: var(--button-color);
     background: var(--button-background);
     box-shadow: 2px 2px 2px rgb(0, 0, 0, 0.4);
     padding: 0 20px;
-    transition: 1s background;
+    transition: 0.5s background;
     cursor: pointer;
 }
 button:hover {
@@ -140,9 +143,19 @@ button.icon:active {
     background: var(--field-background);
     transition: 1s background;
 }
-.field-content * {
-    color: var(--field-color);
+.room-content {
+    border-radius: 10px;
+    width: 800px;
+    padding: 10px 15px;
+    background: var(--room-background);
 }
+
+.room-info{
+    padding: 30px 20px;
+    font-size: 130%
+}
+
+
 .field-content:hover {
     background: var(--field-background-hover);
 }
@@ -167,7 +180,7 @@ button.icon:active {
     padding: 0 20px;
 }
 #title {
-    font-family: Abel, sans-serif;
+    font-family: "Josefin Sans", sans-serif;
     font-size: 300%;
     text-transform: uppercase;
     color: var(--title-color);
@@ -184,7 +197,7 @@ button.icon:active {
     cursor: pointer;
 }
 
-/* Main panel */
+
 #main-panel {
     height: calc(100% - 80px);
     background: var(--main-panel-background);
@@ -192,10 +205,9 @@ button.icon:active {
     margin: 0;
 }
 
-/* Chat area */
-#chat-panel {
+#room-panel {
     flex-grow: 1;
-    align-items: stretch;
+    align-items: center;
     height: 100%;
     background: var(--chat-panel-background);
     padding: 0;
@@ -209,33 +221,25 @@ button.icon:active {
     overflow-y: auto;
     padding: 10px;
 }
-.chat-message-panel {
-    align-items: flex-start;
-    padding: 0;
-}
-.chat-message {
-    align-items: start;
-    gap: 5px;
-    padding: 0;
-}
-.chat-date {
-    font-size: 75%;
-    color: var(--date-color);
+.room-content-panel {
+    align-items: center;
+    color: black;
 }
 
-/* Online users panel */
-#online-users-panel {
-	flex: 0 0 250px;
-    height: 100%;
-    padding: 0;
-    background: var(--online-users-panel-background);
+#new-room-panel {
+    font-size: 130%;
 }
-#online-users-area {
-    flex-grow: 1;
-    width: 100%;
-    align-items: flex-start;
-    justify-content: start;
-    overflow-y: auto;
+
+.d-map {
+    background-color: gold;
+}
+
+.g-map {
+    background-color: #7ec850;
+}
+
+.s-map {
+    background-color: skyblue;
 }
 
 /* Signin overlay */

@@ -10,16 +10,16 @@ const Player = function(ctx, x, y, gameArea) {
     // and the moving sprite sequences `moveLeft`, `moveUp`, `moveRight` and `moveDown`.
     const sequences = {
         /* Idling sprite sequences for facing different directions */
-        idleLeft:  { x: 0, y: 25, width: 24, height: 25, count: 3, timing: 2000, loop: false },
-        idleUp:    { x: 0, y: 50, width: 24, height: 25, count: 1, timing: 2000, loop: false },
-        idleRight: { x: 0, y: 75, width: 24, height: 25, count: 3, timing: 2000, loop: false },
-        idleDown:  { x: 0, y:  0, width: 24, height: 25, count: 3, timing: 2000, loop: false },
+        idleLeft:  { direction: 0, x: 368, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
+        idleUp:    { direction: 1, x: 368, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
+        idleRight: { direction: 0, x: 368, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
+        idleDown:  { direction: 1, x: 368, y: 60, width: 65, height: 66, count: 1, timing: 2000, loop: false },
 
         /* Moving sprite sequences for facing different directions */
-        moveLeft:  { x: 0, y: 125, width: 24, height: 25, count: 10, timing: 50, loop: true },
-        moveUp:    { x: 0, y: 150, width: 24, height: 25, count: 10, timing: 50, loop: true },
-        moveRight: { x: 0, y: 175, width: 24, height: 25, count: 10, timing: 50, loop: true },
-        moveDown:  { x: 0, y: 100, width: 24, height: 25, count: 10, timing: 50, loop: true }
+        moveLeft:  { direction: 0, x: 210, y: 130, width: 68, height: 66, count: 4, timing: 50, loop: true },
+        moveUp:    { direction: 1, x: 70,  y: 130, width: 68, height: 70, count: 4, timing: 50, loop: true },
+        moveRight: { direction: 0, x: 210, y: 200, width: 68, height: 66, count: 4, timing: 50, loop: true },
+        moveDown:  { direction: 1, x: 140, y: 130, width: 68, height: 70, count: 4, timing: 50, loop: true }
     };
 
     // This is the sprite object of the player created from the Sprite module.
@@ -27,9 +27,9 @@ const Player = function(ctx, x, y, gameArea) {
 
     // The sprite object is configured for the player sprite here.
     sprite.setSequence(sequences.idleDown)
-          .setScale(2)
+          .setScale(1)
           .setShadowScale({ x: 0.75, y: 0.20 })
-          .useSheet("player_sprite.png");
+          .useSheet("unit_red.png");
 
     // This is the moving direction, which can be a number from 0 to 4:
     // - `0` - not moving

@@ -8,10 +8,10 @@ const Gem = function(ctx, x, y, color) {
     // This is the sprite sequences of the gem of four colours
     // `green`, `red`, `yellow` and `purple`.
     const sequences = {
-        green:  { direction: 0, x: 0, y:  0, width: 38, height: 38, count: 1, timing: 200, loop: true },
-        red:    { direction: 0, x: 0, y:  0, width: 38, height: 38, count: 1, timing: 200, loop: true },
-        yellow: { direction: 0, x: 0, y:  0, width: 38, height: 38, count: 1, timing: 200, loop: true },
-        purple: { direction: 0, x: 0, y:  0, width: 38, height: 38, count: 1, timing: 200, loop: true }
+        green:  { direction: 0, x: 192, y:  0, width: 16, height: 16, count: 4, timing: 200, loop: true },
+        red:    { direction: 0, x: 192, y: 16, width: 16, height: 16, count: 4, timing: 200, loop: true },
+        yellow: { direction: 0, x: 192, y: 32, width: 16, height: 16, count: 4, timing: 200, loop: true },
+        purple: { direction: 0, x: 192, y: 48, width: 16, height: 16, count: 4, timing: 200, loop: true }
     };
 
     // This is the sprite object of the gem created from the Sprite module.
@@ -19,9 +19,9 @@ const Gem = function(ctx, x, y, color) {
     
     // The sprite object is configured for the gem sprite here.
     sprite.setSequence(sequences[color])
-          .setScale(1)
+          .setScale(2)
           .setShadowScale({ x: 0.75, y: 0.2 })
-          .useSheet("./resources/gem1.png");
+          .useSheet("object_sprites.png");
 
     // This is the birth time of the gem for finding its age.
     let birthTime = performance.now();
@@ -31,6 +31,7 @@ const Gem = function(ctx, x, y, color) {
     // `"green"`, `"red"`, `"yellow"` or `"purple"`
     const setColor = function(color) {
         sprite.setSequence(sequences[color]);
+        birthTime = performance.now();
     };
 
     // This function gets the age (in millisecond) of the gem.
@@ -45,6 +46,7 @@ const Gem = function(ctx, x, y, color) {
         /* Randomize the color */
         const colors = ["green", "red", "yellow", "purple"];
         setColor(colors[Math.floor(Math.random() * 4)]);
+
         while (true) {
             /* Randomize the position */
             const {x, y} = area.randomPoint();
@@ -57,24 +59,15 @@ const Gem = function(ctx, x, y, color) {
                     break;
                 }
             }
-            if (!overlap) {
-                return {x ,y};
-                // break;
-            }
-
+            if (!overlap)
+                break;
         }
     };
-
-    const setXY = function(xvalue, yvalue) {
-        birthTime = performance.now();
-        sprite.setXY(xvalue, yvalue);
-        return this;
-    }
 
     // The methods are returned as an object here.
     return {
         getXY: sprite.getXY,
-        setXY: setXY,
+        setXY: sprite.setXY,
         setColor: setColor,
         getAge: getAge,
         getBoundingBox: sprite.getBoundingBox,

@@ -1,8 +1,26 @@
+const StartOverlay = (function() {
+    const initialize = function() {
+        // $("#start-overlay").show();
+        $("#start-overlay").on("click", () => {
+            hide();
+            SignInForm.show();
+        })
+    };
+
+    const show = function() {
+        $("#start-overlay").show();
+    };
+
+    const hide = function() {
+        $("#start-overlay").fadeOut(500);
+    };
+
+    return { initialize, show, hide };
+})();
+
 const SignInForm = (function() {
     // This function initializes the UI
     const initialize = function() {
-        // Populate the avatar selection
-        Avatar.populate($("#register-avatar"));
         
         // Hide it
         $("#signin-overlay").hide();
@@ -36,8 +54,7 @@ const SignInForm = (function() {
 
             // Get the input fields
             const username = $("#register-username").val().trim();
-            const avatar   = $("#register-avatar").val();
-            const name     = $("#register-name").val().trim();
+            const name     = username;
             const password = $("#register-password").val().trim();
             const confirmPassword = $("#register-confirm").val().trim();
 
@@ -48,7 +65,7 @@ const SignInForm = (function() {
             }
 
             // Send a register request
-            Registration.register(username, avatar, name, password,
+            Registration.register(username, name, password,
                 () => {
                     $("#register-form").get(0).reset();
                     $("#register-message").text("You can sign in now.");
@@ -107,12 +124,10 @@ const UserPanel = (function() {
     // This function updates the user panel
     const update = function(user) {
         if (user) {
-            $("#user-panel .user-avatar").html(Avatar.getCode(user.avatar));
-            $("#user-panel .user-name").text(user.name);
+            $("#user-panel .user-name").text("Current User: " + user.name);
         }
         else {
-            $("#user-panel .user-avatar").html("");
-            $("#user-panel .user-name").text("");
+            $("#user-panel .user-name").text("Current User: ");
         }
     };
 
@@ -128,48 +143,21 @@ const NewRoomPanel = (function() {
                 user1: Authentication.getUser().name, user2: "-" };
                 Rooms.createRoom(room, (rooms) => {
                     RoomPanel.update(rooms);
+                    $("#new-room-message").text("Room is created successfully!");
                 },
                 (error) => {
                     $("#new-room-message").text(error);
-                }, 
+                },
                 () => {
                     $("#new-room-message").text("You are already in another room!");
                 });
             } else {
-                $("#new-room-message").text("Please enter the room name");
+                $("#new-room-message").text("Please enter the room name!");
             }
         });
     };
 
-
-    // This function adds a user in the panel
-	const addUser = function(user) {
-        const onlineUsersArea = $("#online-users-area");
-		
-		// Find the user
-		const userDiv = onlineUsersArea.find("#username-" + user.username);
-		
-		// Add the user
-		if (userDiv.length == 0) {
-			onlineUsersArea.append(
-				$("<div id='username-" + user.username + "'></div>")
-					.append(UI.getUserDisplay(user))
-			);
-		}
-	};
-
-    // This function removes a user from the panel
-	const removeUser = function(user) {
-        const onlineUsersArea = $("#online-users-area");
-		
-		// Find the user
-		const userDiv = onlineUsersArea.find("#username-" + user.username);
-		
-		// Remove the user
-		if (userDiv.length > 0) userDiv.remove();
-	};
-
-    return { initialize, addUser, removeUser };
+    return { initialize };
 })();
 
 const RoomPanel = (function() {
@@ -197,15 +185,23 @@ const RoomPanel = (function() {
 
     // This function adds a new message at the end of the chatroom
     const addRoom = function(room) {
+        var map;
+        if (room.map == "Dessert") {
+            map = "d-map";
+        } else if (room.map == "Sea") {
+            map = "s-map";
+        } else {
+            map = "g-map";
+        }
         roomArea.append(
             $("<div class='room-content-panel row' id='room" + room.name + "'></div>")
-            .append($("<div class='field-content row shadow'></div>")
-                .append($("<span id='room-name" + room.name + "' class='col'><b>Name: </b>" + room.name + "</span>"))
-                .append($("<span id='map" + room.name + "' class='col'><b>Map: </b>" + room.map + "</span>"))
-                .append($("<span id='user-name1-" + room.name + "' class='col'><b>User 1: </b>" + room.user1 + "</span>"))
-                .append($("<span id='user-name2-" + room.name + "' class='col'><b>User 2: </b>" + room.user2 + "</span>"))
-                .append($("<button id='leave-room" + room.name + "'>Leave</button>"))
-                .append($("<button id='join-room" + room.name + "'>Join</button>"))
+            .append($("<div class='room-content row "+ map + "'></div>")
+                .append($("<span id='room-name" + room.name + "' class='col room-info'><b>NAME: </b><p style='font-family: Tapestry'>" + room.name + "</p></span>"))
+                .append($("<span id='map" + room.name + "' class='col room-info'><b>MAP: </b><p>" + room.map + "</P></span>"))
+                .append($("<span id='user-name1-" + room.name + "' class='col room-info'><b>USER 1: </b><p style='font-family: Orelega+One'>" + room.user1 + "</p></span>"))
+                .append($("<span id='user-name2-" + room.name + "' class='col room-info'><b>USER 2: </b><p style='font-family: Orelega+One'>" + room.user2 + "</p></span>"))
+                .append($("<button id='leave-room" + room.name + "' class='col room-info'>LEAVE</button>"))
+                .append($("<button id='join-room" + room.name + "' class='col room-info'>JOIN</button>"))
             )
         );
         roomArea.scrollTop(roomArea[0].scrollHeight);
@@ -229,7 +225,7 @@ const RoomPanel = (function() {
                     $("#new-room-message").text(error);
                 },
                 () => {
-                    $("#new-room-message").text("You are already in another room!");
+                    $("#new-room-message").text("You are already in a room!");
                 });
         });
     };
@@ -246,11 +242,11 @@ const UI = (function() {
     // This function gets the user display
     const getUserDisplay = function(user) {
         return $("<div class='field-content row shadow'></div>")
-            .append($("<span class='user-name'>" + user.name + "</span>"));
+            .append($("<span class='user-name'>Current User: " + user.name + "</span>"));
     };
 
     // The components of the UI are put here
-    const components = [SignInForm, UserPanel, NewRoomPanel, RoomPanel];
+    const components = [StartOverlay, SignInForm, UserPanel, NewRoomPanel, RoomPanel];
 
     // This function initializes the UI
     const initialize = function() {
