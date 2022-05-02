@@ -1,0 +1,23 @@
+{
+  "name": "comp4021-project-group8",
+  "version": "1.0.0",
+  "description": "4021-project",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wlicb/COMP4021-Project-Group8.git"
+  },
+  "keywords": [
+    "4021"
+  ],
+  "author": "zaki_and_lwb",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wlicb/COMP4021-Project-Group8/issues"
+  },
+  "homepage": "https://github.com/wlicb/COMP4021-Project-Group8#readme"
+}
