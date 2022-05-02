@@ -3,7 +3,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const fs = require("fs");
 const session = require("express-session");
-const { json } = require("express");
+// const { json } = require("express");
 
 const onlineUsers = {};
 
@@ -18,7 +18,7 @@ const app = express();
 //
 const { createServer } = require("http");
 const { Server } = require("socket.io");
-const { clear } = require("console");
+// const { clear } = require("console");
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 
