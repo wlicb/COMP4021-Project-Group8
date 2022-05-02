@@ -3,7 +3,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const fs = require("fs");
 const session = require("express-session");
-const { json } = require("express");
+// const { json } = require("express");
 
 const onlineUsers = {};
 
@@ -18,7 +18,7 @@ const app = express();
 //
 const { createServer } = require("http");
 const { Server } = require("socket.io");
-const { clear } = require("console");
+// const { clear } = require("console");
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 
@@ -163,7 +163,10 @@ app.get("/signout", (req, res) => {
 app.post("/newRoom", (req, res) => {
     const room = req.body;
     const rooms = JSON.parse(fs.readFileSync("./data/rooms.json"));
-
+    if (!containWordCharsOnly(room.name)) {
+        res.json({ status: "error", error: "Invalid room name" });
+        return;
+    }
     for (const r of rooms) {
         if (r.name == room.name) {
             res.json({status: "error", 
@@ -377,16 +380,25 @@ io.on("connection", (socket) => {
         io.emit("show hp", res);
     });
 
-    socket.on("restart game", (info) => {
+    socket.on("game end", (room) => {
         const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
         for (var r of roomStatus) {
-            if (r.name == info.room) {
+            if (r.name == room) {
                 r.ready1 = 0;
                 r.ready2 = 0;
                 r.user1Gem = 0;
                 r.user2Gem = 0;
                 r.user1HP = 3;
                 r.user2HP = 3;
+            }
+        }
+        fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
+    });
+
+    socket.on("restart game", (info) => {
+        const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
+        for (var r of roomStatus) {
+            if (r.name == info.room) {
                 if (info.user == "1") {
                     io.emit("hide player 1 ready", info.room);
                 } else if (info.user == "2") {

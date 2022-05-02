@@ -22,5 +22,9 @@
  "yyy": {
   "name": "yyy",
   "password": "$2b$10$im0XLkGrxx.W6ORbEaVdPuRqtTLZa/wuo5sb0cPOfeNJC2TPfup9."
+ },
+ "kkk": {
+  "name": "kkk",
+  "password": "$2b$10$ZYmLD9ST4bBVNosMv0uJF.jEXfQA5FbQNF140ZVAYqIkfO6pLLV/y"
  }
 }

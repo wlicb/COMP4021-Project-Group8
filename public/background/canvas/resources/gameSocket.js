@@ -149,8 +149,12 @@ const GameSocket = (function() {
         socket.emit("quit game", room);
     };
 
+    const gameEnd = function(room) {
+        socket.emit("game end", room);
+    }
+
     return { getSocket, connect, disconnect, updatePlayer, listenPlayer, 
         updateGem, updateBanana, updateBomb, ready, speedUp, listenSpeedUp, updateScore, updateHP,
-        restartGame, quitGame };
+        restartGame, quitGame, gameEnd };
 
 })();

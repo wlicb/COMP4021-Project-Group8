@@ -105,8 +105,8 @@
 
         /* Create the sprites in the game */
         // const player = Player(context, 427, 240, gameArea); // The player
-        const player_red = Player_red(context, 690, 690, gameArea);
-        const player_blue = Player_blue(context, 30, 30, gameArea);
+        let player_red = Player_red(context, 690, 690, gameArea);
+        let player_blue = Player_blue(context, 30, 30, gameArea);
         let player;
         // console.log(Rooms);
         const cookies = document.cookie.split(";");
@@ -135,12 +135,29 @@
         GameSocket.getSocket().on("player 1 ready", (info) => {
             if (info == room) {
                 $("#player1").show();
+                if (user == "1") {
+                    $("#score1").html("SCORE:<br>" + collectedGems + "");
+                    $("#hp1").html("HP:<br>" + hp + "");
+                }
+                else if (user == "2") {
+                    $("#score1").html("SCORE:<br>" + collectedGemsOfOpponent + "");
+                    $("#hp1").html("HP:<br>" + hpOfOpponent + "");
+                }
+
             }
         });
 
         GameSocket.getSocket().on("player 2 ready", (info) => {
             if (info == room) {
                 $("#player2").show();
+                if (user == "1") {
+                    $("#score2").html("SCORE:<br>" + collectedGemsOfOpponent + "");
+                    $("#hp2").html("HP:<br>" + hpOfOpponent + "");
+                }
+                else if (user == "2") {
+                    $("#score2").html("SCORE:<br>" + collectedGems + "");
+                    $("#hp2").html("HP:<br>" + hp + "");
+                }
             }
         });
 
@@ -400,6 +417,8 @@
             gem = Gem(context, 260, 440, "green");        // The gem
             banana = Banana(context, 30, 690, "green"); 
             bomb = Bomb(context, 690, 30, "green"); 
+            // player_red = Player_red(context, 690, 690, gameArea);
+            // player_blue = Player_blue(context, 30, 30, gameArea);
             gameStartTime = 0;
             countDown = 3;
         });
@@ -442,7 +461,7 @@
 
 
             if (user == "1") {
-                $("#user1").html("PLAYER 1:<br>" + player1 + "<br> ***Red is you***");
+                $("#user1").html("PLAYER 1:<br>" + player1 + "<br> **Red is you**");
                 $("#score1").html("SCORE:<br>" + collectedGems + "");
                 $("#score2").html("SCORE:<br>" + collectedGemsOfOpponent + "");
                 $("#hp1").html("HP:<br>" + hp + "");
@@ -458,7 +477,7 @@
 
             /* TODO */
             /* Handle the game over situation here */
-            if(timeRemaining == 0){
+            if(timeRemaining <= 0){
                 //$("#final-gems").text(collectedGems);
                 if (collectedGems > collectedGemsOfOpponent) {
                     if (user == "1") {
@@ -485,27 +504,41 @@
                 $("#game-over").show();
                 sounds.background.pause();
                 sounds.gameover.play();
-
                 console.log(collectedGems);
                 console.log(collectedGemsOfOpponent);
                 console.log(hp);
                 console.log(hpOfOpponent);
+                GameSocket.gameEnd(room);
                 return;
             }
 
             if (hp == 0) {
-                $("#game-over-text").html("You are dead! You lose!");
+                if (user == "1") {
+                    $("#game-over-text").html("You are dead! You lose! <br>" + player1 + " collected " + collectedGems + " Gems but is dead<br>"
+                     + player2 + " collected " + collectedGemsOfOpponent + " Gems");
+                } else {
+                    $("#game-over-text").html("You are dead! You lose! <br>" + player2 + " collected " + collectedGems + " Gems but is dead<br>"
+                     + player1 + " collected " + collectedGemsOfOpponent + " Gems");
+                }
                 $("#game-over").show();
                 sounds.background.pause();
                 sounds.gameover.play();
+                GameSocket.gameEnd(room);
                 return;
             }
 
             if (hpOfOpponent == 0) {
-                $("#game-over-text").html("The other guy is dead! You win!");
+                if (user == "1") {
+                    $("#game-over-text").html("The other guy is dead! You win! <br>" + player2 + " collected " + collectedGemsOfOpponent + " Gems but is dead<br>"
+                     + player1 + " collected " + collectedGems + " Gems");
+                } else {
+                    $("#game-over-text").html("The other guy is dead! You win! <br>" + player1 + " collected " + collectedGemsOfOpponent + " Gems but is dead<br>"
+                     + player2 + " collected " + collectedGems + " Gems");
+                }
                 $("#game-over").show();
                 sounds.background.pause();
                 sounds.gameover.play();
+                GameSocket.gameEnd(room);
                 return;
             }
 
@@ -604,6 +637,7 @@
 
         GameSocket.getSocket().on("all ready", (room) => {
             /* Hide the start screen */
+            sounds.background.currentTime = 0;
             sounds.background.play();
             $("#game-start").fadeOut();
             countDown = 3;
