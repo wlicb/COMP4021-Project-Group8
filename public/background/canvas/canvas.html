@@ -494,7 +494,13 @@
             }
 
             if (hp == 0) {
-                $("#game-over-text").html("You are dead! You lose!");
+                if (user == "1") {
+                    $("#game-over-text").html("You are dead! You lose! <br>" + player1 + " collected " + collectedGems + " Gems but is dead<br>"
+                     + player2 + " collected " + collectedGemsOfOpponent + " Gems");
+                } else {
+                    $("#game-over-text").html("You are dead! You lose! <br>" + player2 + " collected " + collectedGems + " Gems but is dead<br>"
+                     + player1 + " collected " + collectedGemsOfOpponent + " Gems");
+                }
                 $("#game-over").show();
                 GameSocket.gameEnd(room);
                 sounds.background.pause();
@@ -503,7 +509,13 @@
             }
 
             if (hpOfOpponent == 0) {
-                $("#game-over-text").html("The other guy is dead! You win!");
+                if (user == "1") {
+                    $("#game-over-text").html("The other guy is dead! You win! <br>" + player2 + " collected " + collectedGemsOfOpponent + " Gems but is dead<br>"
+                     + player1 + " collected " + collectedGems + " Gems");
+                } else {
+                    $("#game-over-text").html("The other guy is dead! You win! <br>" + player1 + " collected " + collectedGemsOfOpponent + " Gems but is dead<br>"
+                     + player2 + " collected " + collectedGems + " Gems");
+                }
                 $("#game-over").show();
                 GameSocket.gameEnd(room);
                 sounds.background.pause();
