@@ -483,9 +483,9 @@
                     }
                 }
                 $("#game-over").show();
+                GameSocket.gameEnd(room);
                 sounds.background.pause();
                 sounds.gameover.play();
-
                 console.log(collectedGems);
                 console.log(collectedGemsOfOpponent);
                 console.log(hp);
@@ -496,6 +496,7 @@
             if (hp == 0) {
                 $("#game-over-text").html("You are dead! You lose!");
                 $("#game-over").show();
+                GameSocket.gameEnd(room);
                 sounds.background.pause();
                 sounds.gameover.play();
                 return;
@@ -504,6 +505,7 @@
             if (hpOfOpponent == 0) {
                 $("#game-over-text").html("The other guy is dead! You win!");
                 $("#game-over").show();
+                GameSocket.gameEnd(room);
                 sounds.background.pause();
                 sounds.gameover.play();
                 return;
@@ -604,6 +606,7 @@
 
         GameSocket.getSocket().on("all ready", (room) => {
             /* Hide the start screen */
+            sounds.background.currentTime = 0;
             sounds.background.play();
             $("#game-start").fadeOut();
             countDown = 3;

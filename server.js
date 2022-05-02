@@ -163,7 +163,10 @@ app.get("/signout", (req, res) => {
 app.post("/newRoom", (req, res) => {
     const room = req.body;
     const rooms = JSON.parse(fs.readFileSync("./data/rooms.json"));
-
+    if (!containWordCharsOnly(room.name)) {
+        res.json({ status: "error", error: "Invalid room name" });
+        return;
+    }
     for (const r of rooms) {
         if (r.name == room.name) {
             res.json({status: "error", 
@@ -377,12 +380,23 @@ io.on("connection", (socket) => {
         io.emit("show hp", res);
     });
 
+    socket.on("game end", (room) => {
+        const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
+        for (var r of roomStatus) {
+            if (r.name == room) {
+                r.ready1 = 0;
+                r.ready2 = 0;
+            }
+        }
+        fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));
+    });
+
     socket.on("restart game", (info) => {
         const roomStatus = JSON.parse(fs.readFileSync("./data/roomStatus.json", "utf-8"));
         for (var r of roomStatus) {
             if (r.name == info.room) {
-                r.ready1 = 0;
-                r.ready2 = 0;
+                // r.ready1 = 0;
+                // r.ready2 = 0;
                 r.user1Gem = 0;
                 r.user2Gem = 0;
                 r.user1HP = 3;
