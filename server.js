@@ -390,6 +390,7 @@ io.on("connection", (socket) => {
                 r.user2Gem = 0;
                 r.user1HP = 3;
                 r.user2HP = 3;
+                io.emit("initialize game data", room);
             }
         }
         fs.writeFileSync("./data/roomStatus.json", JSON.stringify(roomStatus, null, " "));

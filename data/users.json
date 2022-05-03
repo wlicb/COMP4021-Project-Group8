@@ -1,30 +1,14 @@
 {
- "jon": {
-  "name": "jon",
-  "password": "$2b$10$lGQZUKERx2aeloTEEAC/lOr3mH7/ecqHqzWY/GS1r7YWkr8dzdCSW"
- },
- "abc": {
-  "name": "abc",
-  "password": "$2b$10$gKP/PVvyW.CLrS5eyCbeNumxbGonbqoq/DdLT9hQ9Fb0A0NjpEX9K"
- },
  "lol": {
   "name": "lol",
-  "password": "$2b$10$xoGAxuyZXf4dNYsSW8E8QOet63Dv2j8oHipWRF1eYCJWtlXp0x0KO"
+  "password": "$2b$10$2RqVBmRwzdE4m6zcKtlaa.eAKkjisQO.Q9XYbvjQRXM7x.1.gSkja"
  },
- "ddd": {
-  "name": "ddd",
-  "password": "$2b$10$VpPNIZZgTwH6Y0Xh3PEUqOiEeC8oLyozkvnVHxz78JVqAjTp7RPaO"
+ "Alice": {
+  "name": "Alice",
+  "password": "$2b$10$9WZrhEEYXGg7xPTCT/1//OybVwPAvp5hxY7EQBcibKQ7B67AACDFm"
  },
- "zaki": {
-  "name": "zaki",
-  "password": "$2b$10$56xW0kaobodiFUMv.TdyyeQ49jHA4KNDpdPnhusYXUozZLI0RHNwW"
- },
- "yyy": {
-  "name": "yyy",
-  "password": "$2b$10$im0XLkGrxx.W6ORbEaVdPuRqtTLZa/wuo5sb0cPOfeNJC2TPfup9."
- },
- "kkk": {
-  "name": "kkk",
-  "password": "$2b$10$ZYmLD9ST4bBVNosMv0uJF.jEXfQA5FbQNF140ZVAYqIkfO6pLLV/y"
+ "Bob": {
+  "name": "Bob",
+  "password": "$2b$10$IK.ecB40NEk7lrsz60/U3.TbjIJEV7BG0hvNTsknolUqXpVbiAxIm"
  }
 }

@@ -139,6 +139,15 @@
         $("#user1").html("PLAYER 1:<br>" + player1 + "");
         $("#user2").html("PLAYER 2:<br>" + player2 + "");
 
+        GameSocket.getSocket().on("initialize game data", (targetRoom) => {
+            if (room == targetRoom) {
+                collectedGems = 0;
+                collectedGemsOfOpponent = 0;
+                hpOfOpponent = 3;
+                hp = 3;
+            }
+        });
+
         GameSocket.getSocket().on("player 1 ready", (info) => {
             if (info == room) {
                 $("#player1").show();
@@ -421,7 +430,8 @@
             hp = 3;
             gem = Gem(context, 260, 440, "green");        // The gem
             banana = Banana(context, 30, 690, "green"); 
-            bomb = Bomb(context, 690, 30, "green"); 
+            bomb = Bomb(context, 690, 30, "green");
+            
             // player_red = Player_red(context, 690, 690, gameArea);
             // player_blue = Player_blue(context, 30, 30, gameArea);
             gameStartTime = 0;
@@ -661,7 +671,7 @@
                 /* TODO */
                 /* Handle the key down */
                 // console.log(event.keyCode);
-                if (event.keyCode == 80) {
+                if (event.keyCode == 82) {
                     if(is_up){
                         if (cheat == 0) {
                             cheat = 1;
@@ -713,7 +723,7 @@
             $(document).on("keyup", function(event) {
                 /* TODO */
                 /* Handle the key up */
-                if (event.keyCode == 80) {
+                if (event.keyCode == 82) {
                     is_up = 1;
                 }else if(frozen == 0){
                     if(event.keyCode == 37||event.keyCode == 65){//go left
