@@ -648,7 +648,7 @@
         $("#game-start").on("click", function() {
             GameSocket.ready(room, user);
         });
-
+        let is_up = 0;
         GameSocket.getSocket().on("all ready", (room) => {
             /* Hide the start screen */
             sounds.background.currentTime = 0;
@@ -662,14 +662,17 @@
                 /* Handle the key down */
                 // console.log(event.keyCode);
                 if (event.keyCode == 80) {
-                    if (cheat == 0) {
-                        cheat = 1;
-                        $("#cheat-text").show();
-                        console.log("cheat is 1 now");
-                    } else {
-                        cheat = 0;
-                        $("#cheat-text").hide();
-                        console.log("cheat is 0 now");
+                    if(is_up){
+                        if (cheat == 0) {
+                            cheat = 1;
+                            $("#cheat-text").show();
+                            console.log("cheat is 1 now");
+                        } else {
+                            cheat = 0;
+                            $("#cheat-text").hide();
+                            console.log("cheat is 0 now");
+                        }
+                        is_up = 0;
                     }
                 } else if (frozen == 0){
                     if(event.keyCode == 37||event.keyCode == 65){//go left
@@ -710,7 +713,9 @@
             $(document).on("keyup", function(event) {
                 /* TODO */
                 /* Handle the key up */
-                if(frozen == 0){
+                if (event.keyCode == 80) {
+                    is_up = 1;
+                }else if(frozen == 0){
                     if(event.keyCode == 37||event.keyCode == 65){//go left
                         player.stop(1);
                         GameSocket.updatePlayer(room, 1, 1, user, player.getXY());
