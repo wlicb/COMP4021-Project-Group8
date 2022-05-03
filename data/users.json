@@ -1,14 +1,22 @@
 {
- "lol": {
-  "name": "lol",
-  "password": "$2b$10$2RqVBmRwzdE4m6zcKtlaa.eAKkjisQO.Q9XYbvjQRXM7x.1.gSkja"
+ "jon": {
+  "name": "jon",
+  "password": "$2b$10$AfMyyNOupBJnMt4XLX/DiO.cwgxt30/sCAUgwdmaOHe5DIKlfOetS"
+ },
+ "abc": {
+  "name": "abc",
+  "password": "$2b$10$jHPrvLX1B6x3Py/jwU7XUOwBkNfpt4ukxCzI5quZRfGY3Q..rFTwq"
  },
  "Alice": {
   "name": "Alice",
-  "password": "$2b$10$9WZrhEEYXGg7xPTCT/1//OybVwPAvp5hxY7EQBcibKQ7B67AACDFm"
+  "password": "$2b$10$opDV9UTmk9sNTEd9BPLOKeDQqw.knD6xVK.Z4wPDZPZ53KKOl2Fru"
  },
- "Bob": {
-  "name": "Bob",
-  "password": "$2b$10$IK.ecB40NEk7lrsz60/U3.TbjIJEV7BG0hvNTsknolUqXpVbiAxIm"
+ "Ben": {
+  "name": "Ben",
+  "password": "$2b$10$yVzYxG..Y7X0yXl5.2F.KeWGYKFWVuRURzvh.xAA3nokwTuWIXSrK"
+ },
+ "Cat": {
+  "name": "Cat",
+  "password": "$2b$10$zY15VlCFpQDirTlq1/PsSe55WB79be9woUyEChNqXuQnawq.Euv/a"
  }
 }
