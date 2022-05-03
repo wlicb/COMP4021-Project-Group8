@@ -23,6 +23,7 @@
                     <div id="hp2" class="row">HP:<br>3</div>
                 </div>
             </div>
+            <div id="cheat-text" style="display: none; margin-top: 10%">You are in cheat mode! </div>
         </div>
 
         <div id="game-container" class="col">
@@ -101,6 +102,7 @@
         let hp = 3;
         let countDown = 3;
         let dir = 0;
+        let cheat = 0;
         /* Create the game area */
         const gameArea = BoundingBox(context, 30, 30, 690, 690);
 
@@ -608,13 +610,15 @@
                 GameSocket.updateHP(user, 1, room);
             }
             if(player.getBoundingBox().isPointInBox(bomb.getXY()["x"],bomb.getXY()["y"])){
-                hp--;
-                sounds.get_Bomb.play();
+                if (cheat == 0) {
+                    hp--;
+                    GameSocket.updateHP(user, -1, room);
+                    // bombTime = now + 3000;
+                    frozen = 1;
+                }
                 const {x, y} = bomb.randomize(gameArea, boxes, boxes.length);
                 GameSocket.updateBomb(room, x, y);
-                GameSocket.updateHP(user, -1, room);
-                // bombTime = now + 3000;
-                frozen = 1;
+                sounds.get_Bomb.play();
             }
 
             // if (now > bombTime) {
@@ -657,7 +661,17 @@
                 /* TODO */
                 /* Handle the key down */
                 // console.log(event.keyCode);
-                if(frozen == 0){
+                if (event.keyCode == 80) {
+                    if (cheat == 0) {
+                        cheat = 1;
+                        $("#cheat-text").show();
+                        console.log("cheat is 1 now");
+                    } else {
+                        cheat = 0;
+                        $("#cheat-text").hide();
+                        console.log("cheat is 0 now");
+                    }
+                } else if (frozen == 0){
                     if(event.keyCode == 37||event.keyCode == 65){//go left
                         player.move(1);
                         GameSocket.updatePlayer(room, 1, 0, user, player.getXY());
